@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import ManualTab from './components/ManualTab';
 import AutoTab from './components/AutoTab';
 import SiteDataCleaner from './components/SiteDataCleaner';
+import { GitHubIcon } from './components/Icons';
 import {
   clearSiteData,
   getCurrentTabUrl,
@@ -171,6 +172,23 @@ function App() {
             v{packageJson.version}
           </span>
         </div>
+        <a
+          href="https://github.com/dinhanhthi/quick-clear-chrome"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            color: 'var(--foreground)',
+            opacity: 0.6,
+            transition: 'opacity 0.2s',
+            textDecoration: 'none',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+          onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.6')}
+        >
+          <GitHubIcon size={18} />
+        </a>
       </header>
 
       {/* Tabs */}
