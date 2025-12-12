@@ -2,6 +2,8 @@
 
 A modern, fast extension to clear browser history, downloads, and site-specific data (cookies, storage).
 
+<img src="./public/screenshot.png" alt="Quick Clear Screenshot" width="300" />
+
 ## Development
 
 ```bash
