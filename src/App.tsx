@@ -125,7 +125,7 @@ function App() {
       className="container"
       style={{
         gap: '8px',
-        paddingBottom: autoEnabled ? '60px' : '8px',
+        paddingBottom: autoEnabled ? '60px' : '16px',
         position: 'relative',
         minHeight: '400px',
       }}
@@ -136,11 +136,17 @@ function App() {
           alignItems: 'center',
           justifyContent: 'space-between',
           marginBottom: '8px',
-          paddingBottom: '8px',
-          borderBottom: '1px solid var(--border-color)',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <img
+            src="/icons/icon-48.png"
+            alt="Quick Clear Logo"
+            style={{
+              width: '24px',
+              height: '24px',
+            }}
+          />
           <h1
             style={{
               margin: 0,
@@ -167,6 +173,7 @@ function App() {
         </div>
       </header>
 
+      {/* Tabs */}
       <div
         style={{
           display: 'flex',
