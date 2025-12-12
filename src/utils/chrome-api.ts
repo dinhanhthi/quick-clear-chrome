@@ -9,6 +9,7 @@ export interface AutoClearSettings {
   enabled: boolean;
   interval: number; // in minutes
   unit: 'minute' | 'hour' | 'day';
+  timeRange: TimeRange;
   clearHistory: boolean;
   clearDownloads: boolean;
 }

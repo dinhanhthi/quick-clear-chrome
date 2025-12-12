@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import type { AutoClearSettings } from '../utils/chrome-api';
+import TimeRangeSelector from './TimeRangeSelector';
 
 const AutoTab = () => {
   const [settings, setSettings] = useState<AutoClearSettings>({
     enabled: false,
     interval: 60,
     unit: 'minute',
+    timeRange: 'last_hour',
     clearHistory: true,
     clearDownloads: false,
   });
@@ -107,6 +109,11 @@ const AutoTab = () => {
           </select>
         </div>
       </div>
+
+      <TimeRangeSelector
+        value={settings.timeRange}
+        onChange={(v) => saveSettings({ ...settings, timeRange: v as any })}
+      />
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <label style={{ fontSize: '13px', fontWeight: 500 }}>

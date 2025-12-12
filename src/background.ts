@@ -44,44 +44,16 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     chrome.storage.local.get(['autoClearSettings'], (result) => {
       const settings = result.autoClearSettings as AutoClearSettings;
       if (settings && settings.enabled) {
-        if (settings.clearHistory) {
-          clearBrowserHistory('last_hour').then(() => { 
-             // Note: 'last_hour' is hardcoded here? 
-             // The requirement said "auto remove periodically".
-             // It implies removing what happened *since last time*?
-             // Or just clearing history?
-             // Usually auto-clear means "prevent history from accumulating".
-             // If period is X, we probably want to clear keys for valid timeranges.
-             // But 'clearBrowserHistory' takes a TimeRange. 
-             // If I run every 10 mins, I should probably clear 'last_hour' or something?
-             // Or maybe 'all_time'? 
-             // "action: remove history or/and downloads" 
-             // If I clear 'all_time' every 10 minutes, that works.
-             // If I clear 'last_hour' every day, that's weird.
-             // I will assume clearing EVERYTHING (all_time) is the goal effectively,
-             // or maybe the user wants to clear just the recent stuff?
-             // Given the options are simple checks, I'll default to 'all_time' or equivalent
-             // actually, better to safeguard and maybe clear 'all_time'?
-             // But 'clearBrowserHistory' implementation calls 'removeHistory({ since })'.
-             // If I pass 'all_time', since=0.
-             // Let's assume 'all_time' for auto-clear to ensure clean slate.
-          }); 
-        }
-        
-        // Wait, I can't chain these easily if I want to run concurrently properly.
-        const tasks = [];
-        // Use 'all_time' for complete cleaning as per "Auto Remove" usually implies keeping it clean.
-        // However, if the user downloads something important 3 days ago, and sets auto clear every hour today...
-        // Maybe they only want to clear "recent"?
-        // The requirement "every X minute / hour / day" 
-        // suggests the frequency of cleaning.
-        // I will use 'all_time' for now as it's the most effective "clear"
+        const timeRange = settings.timeRange || 'all_time';
+        console.log(`[QuickClear] Auto-cleaning with range: ${timeRange}`);
+
+        const tasks: Promise<void>[] = [];
         
         if (settings.clearHistory) {
-            tasks.push(clearBrowserHistory('all_time'));
+            tasks.push(clearBrowserHistory(timeRange));
         }
         if (settings.clearDownloads) {
-            tasks.push(clearDownloadHistory('all_time'));
+            tasks.push(clearDownloadHistory(timeRange));
         }
         
         Promise.all(tasks).then(() => {
