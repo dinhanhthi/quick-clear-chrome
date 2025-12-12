@@ -1,6 +1,7 @@
 import {
   clearBrowserHistory,
   clearDownloadHistory,
+  clearEverything,
   type AutoClearSettings,
 } from './utils/chrome-api';
 
@@ -49,16 +50,22 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 
         const tasks: Promise<void>[] = [];
         
-        if (settings.clearHistory) {
+        if (settings.clearEverything) {
+          // Clear everything takes precedence
+          tasks.push(clearEverything(timeRange));
+        } else {
+          // Clear individual items based on settings
+          if (settings.clearHistory) {
             tasks.push(clearBrowserHistory(timeRange));
-        }
-        if (settings.clearDownloads) {
+          }
+          if (settings.clearDownloads) {
             tasks.push(clearDownloadHistory(timeRange));
+          }
         }
         
         Promise.all(tasks).then(() => {
-            console.log('[QuickClear] Auto-clear finished.');
-            chrome.storage.local.set({ lastAutoClearTime: Date.now() });
+          console.log('[QuickClear] Auto-clear finished.');
+          chrome.storage.local.set({ lastAutoClearTime: Date.now() });
         });
       }
     });

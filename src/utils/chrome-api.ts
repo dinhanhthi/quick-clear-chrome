@@ -12,6 +12,7 @@ export interface AutoClearSettings {
   timeRange: TimeRange;
   clearHistory: boolean;
   clearDownloads: boolean;
+  clearEverything: boolean;
 }
 
 const getSinceTimestamp = (range: TimeRange): number => {

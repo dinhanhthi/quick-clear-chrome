@@ -10,6 +10,7 @@ const AutoTab = () => {
     timeRange: 'last_hour',
     clearHistory: true,
     clearDownloads: false,
+    clearEverything: false,
   });
 
   useEffect(() => {
@@ -134,7 +135,7 @@ const AutoTab = () => {
               onChange={(e) =>
                 saveSettings({ ...settings, clearHistory: e.target.checked })
               }
-              disabled={!settings.enabled}
+              disabled={!settings.enabled || settings.clearEverything}
             />
             Browser History
           </label>
@@ -152,9 +153,42 @@ const AutoTab = () => {
               onChange={(e) =>
                 saveSettings({ ...settings, clearDownloads: e.target.checked })
               }
-              disabled={!settings.enabled}
+              disabled={!settings.enabled || settings.clearEverything}
             />
             Downloads
+          </label>
+          <label
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '8px',
+              fontSize: '13px',
+            }}
+          >
+            <input
+              type="checkbox"
+              checked={settings.clearEverything}
+              onChange={(e) => {
+                const isChecked = e.target.checked;
+                saveSettings({
+                  ...settings,
+                  clearEverything: isChecked,
+                  // If Everything is checked, disable the other options
+                  clearHistory: isChecked ? false : settings.clearHistory,
+                  clearDownloads: isChecked ? false : settings.clearDownloads,
+                });
+              }}
+              disabled={!settings.enabled}
+              style={{ marginTop: '2px' }}
+            />
+            <span>
+              Everything{' '}
+              <span
+                style={{ color: 'var(--muted-foreground)', fontSize: '12px' }}
+              >
+                (cookies, cache, history, downloads, passwords, etc.)
+              </span>
+            </span>
           </label>
         </div>
       </div>

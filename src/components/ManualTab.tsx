@@ -25,6 +25,23 @@ const ManualTab = ({
   onTimeRangeChange,
   onAction,
 }: ManualTabProps) => {
+  const handleClearEverything = () => {
+    const confirmed = window.confirm(
+      'Are you sure you want to clear EVERYTHING?\n\n' +
+        'This will remove:\n' +
+        '• All browsing history\n' +
+        "• All cookies (you'll be logged out)\n" +
+        '• All cache and stored data\n' +
+        '• All saved passwords\n' +
+        '• All form data\n\n' +
+        'This action cannot be undone!'
+    );
+
+    if (confirmed) {
+      onAction('everything', () => clearEverything(timeRange));
+    }
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
       <TimeRangeSelector
@@ -71,9 +88,7 @@ const ManualTab = ({
           title="Everything"
           description="Cookies, cache, history, downloads..."
           icon={<TrashIcon size={24} />}
-          onClick={() =>
-            onAction('everything', () => clearEverything(timeRange))
-          }
+          onClick={handleClearEverything}
           variant="danger"
         />
       </div>
