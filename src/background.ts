@@ -7,6 +7,20 @@ import {
 
 const ALARM_NAME = 'auto-clear-alarm';
 
+// Update badge to show auto clean status
+const updateBadge = (settings: AutoClearSettings) => {
+  if (settings.enabled) {
+    // Show green dot when auto clean is ON (using space for smallest badge)
+    chrome.action.setBadgeText({ text: 'ao' });
+    chrome.action.setBadgeBackgroundColor({ color: '#22c55e' }); // Green color
+    chrome.action.setTitle({ title: 'Quick Clear - Auto Clean ON' });
+  } else {
+    // Remove badge when auto clean is OFF
+    chrome.action.setBadgeText({ text: '' });
+    chrome.action.setTitle({ title: 'Quick Clear' });
+  }
+};
+
 // Initialize or update alarm based on settings
 const updateAlarm = (settings: AutoClearSettings) => {
   if (settings.enabled && settings.interval > 0) {
@@ -35,6 +49,7 @@ chrome.storage.onChanged.addListener((changes, area) => {
     const newSettings = changes.autoClearSettings.newValue as AutoClearSettings;
     console.log('[QuickClear] Settings changed:', newSettings);
     updateAlarm(newSettings);
+    updateBadge(newSettings);
   }
 });
 
@@ -76,7 +91,9 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.local.get(['autoClearSettings'], (result) => {
         if (result.autoClearSettings) {
-           updateAlarm(result.autoClearSettings as AutoClearSettings);
+           const settings = result.autoClearSettings as AutoClearSettings;
+           updateAlarm(settings);
+           updateBadge(settings);
         }
     });
 });
@@ -84,7 +101,9 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.runtime.onStartup.addListener(() => {
     chrome.storage.local.get(['autoClearSettings'], (result) => {
         if (result.autoClearSettings) {
-           updateAlarm(result.autoClearSettings as AutoClearSettings);
+           const settings = result.autoClearSettings as AutoClearSettings;
+           updateAlarm(settings);
+           updateBadge(settings);
         }
     });
 });
