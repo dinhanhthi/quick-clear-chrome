@@ -10,8 +10,9 @@ A modern, fast extension to clear browser history, downloads, and site-specific 
 npm install
 npm run dev   # UI development
 npm run build # Build extension to dist/
-npm run update-version 1.1.0 # Update version in package.json and manifest.json
+npm run version 1.1.0 # Update version in package.json and manifest.json
 npm run zip   # Create a .zip file for Chrome Web Store upload
+npm run prettier # Format code
 ```
 
 ## Installation

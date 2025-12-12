@@ -1,31 +1,37 @@
-import { useState } from "react";
-import ActionButton from "./components/ActionButton";
-import TimeRangeSelector from "./components/TimeRangeSelector";
-import SiteDataCleaner from "./components/SiteDataCleaner";
-import { HistoryIcon, DownloadIcon, TrashIcon } from "./components/Icons";
+import { useState } from 'react';
+import ActionButton from './components/ActionButton';
+import TimeRangeSelector from './components/TimeRangeSelector';
+import SiteDataCleaner from './components/SiteDataCleaner';
+import {
+  HistoryIcon,
+  DownloadIcon,
+  TrashIcon,
+  HistoryDownloadIcon,
+} from './components/Icons';
 import {
   clearBrowserHistory,
   clearDownloadHistory,
   clearEverything,
   clearSiteData,
   getCurrentTabUrl,
+  clearHistoryAndDownloads,
   type TimeRange,
-} from "./utils/chrome-api";
-import packageJson from "../package.json";
+} from './utils/chrome-api';
+import packageJson from '../package.json';
 
 function App() {
-  const [timeRange, setTimeRange] = useState<TimeRange>("last_hour");
-  type StatusType = "success" | "error" | "info";
+  const [timeRange, setTimeRange] = useState<TimeRange>('last_hour');
+  type StatusType = 'success' | 'error' | 'info';
   const [status, setStatus] = useState<{
     message: string;
     type: StatusType;
   } | null>(null);
 
   const handleClearCurrentSite = async () => {
-    setStatus({ message: "Getting current site...", type: "info" });
+    setStatus({ message: 'Getting current site...', type: 'info' });
     const url = await getCurrentTabUrl();
     if (!url) {
-      setStatus({ message: "Could not get current site.", type: "error" });
+      setStatus({ message: 'Could not get current site.', type: 'error' });
       setTimeout(() => setStatus(null), 2000);
       return;
     }
@@ -38,52 +44,52 @@ function App() {
     actionName: string,
     actionFn: () => Promise<void>
   ) => {
-    setStatus({ message: `Cleaning ${actionName}...`, type: "info" });
+    setStatus({ message: `Cleaning ${actionName}...`, type: 'info' });
     try {
       await actionFn();
       setStatus({
         message: `Successfully cleared ${actionName}!`,
-        type: "success",
+        type: 'success',
       });
       setTimeout(() => setStatus(null), 2000);
     } catch (error) {
       console.error(error);
-      setStatus({ message: "Error occurred.", type: "error" });
+      setStatus({ message: 'Error occurred.', type: 'error' });
       setTimeout(() => setStatus(null), 2000);
     }
   };
 
   return (
-    <div className="container" style={{ gap: "8px" }}>
+    <div className="container" style={{ gap: '8px' }}>
       <header
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: "8px",
-          paddingBottom: "8px",
-          borderBottom: "1px solid var(--border-color)",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: '8px',
+          paddingBottom: '8px',
+          borderBottom: '1px solid var(--border-color)',
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <h1
             style={{
               margin: 0,
-              fontSize: "18px",
+              fontSize: '18px',
               fontWeight: 600,
-              letterSpacing: "-0.5px",
-              whiteSpace: "nowrap",
+              letterSpacing: '-0.5px',
+              whiteSpace: 'nowrap',
             }}
           >
             Quick Clear
           </h1>
           <span
             style={{
-              fontSize: "10px",
-              backgroundColor: "var(--muted)",
-              color: "var(--muted-foreground)",
-              padding: "2px 6px",
-              borderRadius: "999px",
+              fontSize: '10px',
+              backgroundColor: 'var(--muted)',
+              color: 'var(--muted-foreground)',
+              padding: '2px 6px',
+              borderRadius: '999px',
               fontWeight: 500,
             }}
           >
@@ -97,13 +103,13 @@ function App() {
         onChange={(v) => setTimeRange(v as TimeRange)}
       />
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
         <ActionButton
           title="Clear Browser History"
           description="Removes visited pages history"
           icon={<HistoryIcon size={24} />}
           onClick={() =>
-            handleAction("history", () => clearBrowserHistory(timeRange))
+            handleAction('history', () => clearBrowserHistory(timeRange))
           }
           variant="primary"
         />
@@ -113,19 +119,31 @@ function App() {
           description="Removes download history"
           icon={<DownloadIcon size={24} />}
           onClick={() =>
-            handleAction("downloads", () => clearDownloadHistory(timeRange))
+            handleAction('downloads', () => clearDownloadHistory(timeRange))
           }
           variant="info" // Using info/purpleish style
         />
 
-        <div style={{ margin: "4px 0" }} />
+        <div style={{ margin: '4px 0' }} />
+
+        <ActionButton
+          title="Clear History + Downloads"
+          description="Removes history and downloads only"
+          icon={<HistoryDownloadIcon size={24} />}
+          onClick={() =>
+            handleAction('history + downloads', () =>
+              clearHistoryAndDownloads(timeRange)
+            )
+          }
+          variant="primary"
+        />
 
         <ActionButton
           title="Clear Everything"
           description="Cookies, cache, history, downloads..."
           icon={<TrashIcon size={24} />}
           onClick={() =>
-            handleAction("everything", () => clearEverything(timeRange))
+            handleAction('everything', () => clearEverything(timeRange))
           }
           variant="danger"
         />
@@ -140,17 +158,17 @@ function App() {
       {status && (
         <div
           style={{
-            fontSize: "12px",
+            fontSize: '12px',
             color:
-              status.type === "error"
-                ? "var(--status-error)"
-                : status.type === "success"
-                ? "var(--status-text)"
-                : "var(--muted-foreground)",
+              status.type === 'error'
+                ? 'var(--status-error)'
+                : status.type === 'success'
+                  ? 'var(--status-text)'
+                  : 'var(--muted-foreground)',
             fontWeight: 500,
-            textAlign: "center",
-            marginTop: "8px",
-            minHeight: "18px",
+            textAlign: 'center',
+            marginTop: '8px',
+            minHeight: '18px',
           }}
         >
           {status.message}

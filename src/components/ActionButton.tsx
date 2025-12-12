@@ -9,12 +9,12 @@ interface ActionButtonProps {
   disabled?: boolean;
 }
 
-const ActionButton: React.FC<ActionButtonProps> = ({ 
-  title, 
-  description, 
-  icon, 
-  onClick, 
-  disabled = false
+const ActionButton: React.FC<ActionButtonProps> = ({
+  title,
+  description,
+  icon,
+  onClick,
+  disabled = false,
 }) => {
   // Common style for all buttons to look like shadcn cards/items
   const btnStyle: React.CSSProperties = {
@@ -35,19 +35,39 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   };
 
   return (
-    <button 
-      onClick={onClick} 
+    <button
+      onClick={onClick}
       style={btnStyle}
-      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--muted)'}
-      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--card-bg)'}
+      onMouseEnter={(e) =>
+        (e.currentTarget.style.backgroundColor = 'var(--muted)')
+      }
+      onMouseLeave={(e) =>
+        (e.currentTarget.style.backgroundColor = 'var(--card-bg)')
+      }
       className="action-btn"
     >
-      <div style={{ marginRight: '12px', display: 'flex', color: 'var(--primary)' }}>
+      <div
+        style={{
+          marginRight: '12px',
+          display: 'flex',
+          color: 'var(--primary)',
+        }}
+      >
         {icon}
       </div>
       <div>
         <div style={{ fontWeight: 500, fontSize: '14px' }}>{title}</div>
-        {description && <div style={{ fontSize: '12px', color: 'var(--muted-foreground)', marginTop: '2px' }}>{description}</div>}
+        {description && (
+          <div
+            style={{
+              fontSize: '12px',
+              color: 'var(--muted-foreground)',
+              marginTop: '2px',
+            }}
+          >
+            {description}
+          </div>
+        )}
       </div>
     </button>
   );
