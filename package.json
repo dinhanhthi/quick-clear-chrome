@@ -11,7 +11,9 @@
     "prettier": "prettier --write .",
     "preview": "vite preview",
     "version": "sh ./scripts/update_version.sh",
-    "zip": "sh ./scripts/zip_extension.sh"
+    "zip": "sh ./scripts/zip_extension.sh",
+    "playground": "vite --config vite.playground.config.ts --open",
+    "playground:clean": "lsof -ti:5174 | xargs kill -9 2>/dev/null || true && npm run playground"
   },
   "dependencies": {
     "react": "^19.2.0",

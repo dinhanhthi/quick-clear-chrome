@@ -45,16 +45,11 @@ const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
         style={{
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
-          marginBottom: '8px',
-          padding: '8px',
-          backgroundColor: 'var(--muted)',
-          borderRadius: 'var(--radius)',
+          justifyContent: 'flex-start',
+          gap: '8px',
+          margin: '10px 0',
         }}
       >
-        <span style={{ fontSize: '12px', color: 'var(--text-color)' }}>
-          Only history and download
-        </span>
         <label className="switch">
           <input
             type="checkbox"
@@ -63,6 +58,9 @@ const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
           />
           <span className="slider round"></span>
         </label>
+        <span style={{ fontSize: '12px', color: 'var(--text-color)' }}>
+          Only history and download
+        </span>
       </div>
       <form
         onSubmit={handleSubmit}
@@ -131,8 +129,8 @@ const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
         .switch {
           position: relative;
           display: inline-block;
-          width: 30px;
-          height: 16px;
+          width: 26px;
+          height: 14px;
         }
         .switch input { 
           opacity: 0;
@@ -153,10 +151,10 @@ const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
         .slider:before {
           position: absolute;
           content: "";
-          height: 14px;
-          width: 14px;
-          left: 3px;
-          bottom: 3px;
+          height: 10px;
+          width: 10px;
+          left: 2px;
+          bottom: 2px;
           background-color: white;
           -webkit-transition: .4s;
           transition: .4s;
@@ -168,9 +166,9 @@ const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
           box-shadow: 0 0 1px #2196F3;
         }
         input:checked + .slider:before {
-          -webkit-transform: translateX(14px);
-          -ms-transform: translateX(14px);
-          transform: translateX(14px);
+          -webkit-transform: translateX(12px);
+          -ms-transform: translateX(12px);
+          transform: translateX(12px);
         }
         .slider.round {
           border-radius: 34px;

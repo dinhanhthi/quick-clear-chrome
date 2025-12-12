@@ -2,6 +2,15 @@
 
 A modern, fast extension to clear browser history, downloads, and site-specific data (cookies, storage).
 
+## Features
+
+- **Manual Clear**: Clear history, downloads, or everything with customizable time ranges (last hour, 24 hours, 7 days, 4 weeks, all time)
+- **Auto Clear**: Schedule automatic cleaning at set intervals (minutes/hours/days)
+- **Site-Specific Cleaner**: Clear data for specific domains or the current active site
+- **Visual Indicator**: Green dot on extension icon when auto-clean is active
+- **Dark Mode Support**: Seamless light/dark theme switching
+- **Playground** (dev only): A simple UI to test the extension in development.
+
 <img src="./public/screenshot.png" alt="Quick Clear Screenshot" width="500" />
 
 ## Development

@@ -29,6 +29,12 @@ function App() {
 
   useEffect(() => {
     const loadFooterData = () => {
+      // Check if Chrome APIs are available
+      if (!chrome?.storage?.local) {
+        console.warn('Chrome storage API not available yet');
+        return;
+      }
+
       // Check settings
       chrome.storage.local.get(
         ['autoClearSettings', 'lastAutoClearTime'],
@@ -48,13 +54,15 @@ function App() {
       );
 
       // Check alarm
-      chrome.alarms.get('auto-clear-alarm', (alarm) => {
-        if (alarm) {
-          setNextRun(alarm.scheduledTime);
-        } else {
-          setNextRun(null);
-        }
-      });
+      if (chrome?.alarms?.get) {
+        chrome.alarms.get('auto-clear-alarm', (alarm) => {
+          if (alarm) {
+            setNextRun(alarm.scheduledTime);
+          } else {
+            setNextRun(null);
+          }
+        });
+      }
     };
 
     loadFooterData();
@@ -71,9 +79,14 @@ function App() {
       }
     };
 
-    chrome.storage.onChanged.addListener(handleStorageChange);
+    if (chrome?.storage?.onChanged) {
+      chrome.storage.onChanged.addListener(handleStorageChange);
+    }
+
     return () => {
-      chrome.storage.onChanged.removeListener(handleStorageChange);
+      if (chrome?.storage?.onChanged) {
+        chrome.storage.onChanged.removeListener(handleStorageChange);
+      }
     };
   }, []);
 
@@ -311,7 +324,7 @@ function App() {
       {autoEnabled && (
         <div
           style={{
-            position: 'fixed',
+            position: 'absolute',
             bottom: 0,
             left: 0,
             right: 0,

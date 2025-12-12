@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quick Clear - Playground</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        width: 100%;
+      }
+      #playground-container {
+        width: 350px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        #playground-container {
+          background: #09090b;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="playground-container">
+      <div id="root"></div>
+    </div>
+    <script type="module" src="/src/playground.tsx"></script>
+  </body>
+</html>

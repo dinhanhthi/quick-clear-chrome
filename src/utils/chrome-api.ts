@@ -46,10 +46,10 @@ const getOrigin = (input: string): string | null => {
   }
 };
 
-const isDev = !chrome?.browsingData;
+const isDev = () => !chrome?.browsingData;
 
 export const clearBrowserHistory = async (range: TimeRange): Promise<void> => {
-  if (isDev) {
+  if (isDev()) {
     console.log(`[DEV] Clearing browser history for range: ${range}`);
     return;
   }
@@ -62,7 +62,7 @@ export const clearBrowserHistory = async (range: TimeRange): Promise<void> => {
 };
 
 export const clearDownloadHistory = async (range: TimeRange): Promise<void> => {
-  if (isDev) {
+  if (isDev()) {
     console.log(`[DEV] Clearing download history for range: ${range}`);
     return;
   }
@@ -76,7 +76,7 @@ export const clearDownloadHistory = async (range: TimeRange): Promise<void> => {
 export const clearHistoryAndDownloads = async (
   range: TimeRange
 ): Promise<void> => {
-  if (isDev) {
+  if (isDev()) {
     console.log(`[DEV] Clearing History + Downloads for range: ${range}`);
     return;
   }
@@ -85,7 +85,7 @@ export const clearHistoryAndDownloads = async (
 };
 
 export const clearEverything = async (range: TimeRange): Promise<void> => {
-  if (isDev) {
+  if (isDev()) {
     console.log(`[DEV] Clearing EVERYTHING for range: ${range}`);
     return;
   }
@@ -122,7 +122,7 @@ export const clearEverything = async (range: TimeRange): Promise<void> => {
 };
 
 export const clearSiteData = async (input: string): Promise<void> => {
-  if (isDev) {
+  if (isDev()) {
     console.log(`[DEV] Clearing data for site input: ${input}`);
     return;
   }
@@ -188,7 +188,7 @@ export const clearSiteData = async (input: string): Promise<void> => {
 export const clearSiteHistoryAndDownloads = async (
   input: string
 ): Promise<void> => {
-  if (isDev) {
+  if (isDev()) {
     console.log(`[DEV] Clearing history and downloads for site input: ${input}`);
     return;
   }
@@ -213,7 +213,7 @@ export const clearSiteHistoryAndDownloads = async (
 };
 
 export const getCurrentTabUrl = async (): Promise<string | null> => {
-  if (isDev) {
+  if (isDev()) {
     return 'https://example.com';
   }
 

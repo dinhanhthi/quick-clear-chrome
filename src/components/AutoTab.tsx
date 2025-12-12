@@ -15,20 +15,24 @@ const AutoTab = () => {
 
   useEffect(() => {
     // Load settings from storage
-    chrome.storage.local.get(['autoClearSettings'], (result) => {
-      if (result.autoClearSettings) {
-        setSettings(result.autoClearSettings as AutoClearSettings);
-      }
-    });
+    if (chrome?.storage?.local) {
+      chrome.storage.local.get(['autoClearSettings'], (result) => {
+        if (result.autoClearSettings) {
+          setSettings(result.autoClearSettings as AutoClearSettings);
+        }
+      });
+    }
   }, []);
 
   const saveSettings = (newSettings: AutoClearSettings) => {
     setSettings(newSettings);
-    chrome.storage.local.set({ autoClearSettings: newSettings }, () => {
-      // Notify background script to update alarms?
-      // Or just let background script listen to storage changes (if that works reliably for alarms)
-      // Usually better to sendMessage or rely on storage.onChanged in background
-    });
+    if (chrome?.storage?.local) {
+      chrome.storage.local.set({ autoClearSettings: newSettings }, () => {
+        // Notify background script to update alarms?
+        // Or just let background script listen to storage changes (if that works reliably for alarms)
+        // Usually better to sendMessage or rely on storage.onChanged in background
+      });
+    }
   };
 
   const handleUnitChange = (unit: 'minute' | 'hour' | 'day') => {
@@ -235,10 +239,10 @@ const AutoTab = () => {
         .slider:before {
           position: absolute;
           content: "";
-          height: 14px;
-          width: 14px;
-          left: 3px;
-          bottom: 3px;
+          height: 12px;
+          width: 12px;
+          left: 2px;
+          bottom: 2px;
           background-color: white;
           -webkit-transition: .4s;
           transition: .4s;
