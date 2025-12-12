@@ -5,6 +5,14 @@ export type TimeRange =
   | 'last_4weeks'
   | 'all_time';
 
+export interface AutoClearSettings {
+  enabled: boolean;
+  interval: number; // in minutes
+  unit: 'minute' | 'hour' | 'day';
+  clearHistory: boolean;
+  clearDownloads: boolean;
+}
+
 const getSinceTimestamp = (range: TimeRange): number => {
   const now = Date.now();
   switch (range) {

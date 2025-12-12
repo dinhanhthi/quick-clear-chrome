@@ -16,23 +16,30 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   onClick,
   disabled = false,
 }) => {
-  // Common style for all buttons to look like shadcn cards/items
   const btnStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'start',
+    gap: '4px',
+    flexDirection: 'row',
     width: '100%',
-    padding: '12px',
+    height: 'auto',
+    padding: '10px',
     borderRadius: 'var(--radius)',
     backgroundColor: 'var(--card-bg)',
     color: 'var(--text-color)',
     border: '1px solid var(--border-color)',
     transition: 'background-color 0.2s',
-    marginBottom: '8px',
-    textAlign: 'left',
+    marginBottom: '0',
+    textAlign: 'center',
     opacity: disabled ? 0.6 : 1,
     cursor: disabled ? 'not-allowed' : 'pointer',
     pointerEvents: disabled ? 'none' : 'auto',
   };
+
+  const iconWithFixedSize = React.isValidElement(icon)
+    ? React.cloneElement(icon as React.ReactElement<any>, { size: 20 })
+    : icon;
 
   return (
     <button
@@ -45,29 +52,20 @@ const ActionButton: React.FC<ActionButtonProps> = ({
         (e.currentTarget.style.backgroundColor = 'var(--card-bg)')
       }
       className="action-btn"
+      title={`${title}${description ? ' - ' + description : ''}`}
     >
       <div
         style={{
-          marginRight: '12px',
+          marginRight: '0',
+          marginBottom: '4px',
           display: 'flex',
           color: 'var(--primary)',
         }}
       >
-        {icon}
+        {iconWithFixedSize}
       </div>
-      <div>
-        <div style={{ fontWeight: 500, fontSize: '14px' }}>{title}</div>
-        {description && (
-          <div
-            style={{
-              fontSize: '12px',
-              color: 'var(--muted-foreground)',
-              marginTop: '2px',
-            }}
-          >
-            {description}
-          </div>
-        )}
+      <div style={{ fontSize: '10px', fontWeight: 500, lineHeight: 1.2 }}>
+        {title.replace('Clear ', '')}
       </div>
     </button>
   );

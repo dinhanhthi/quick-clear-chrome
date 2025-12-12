@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
   "name": "Quick Clear",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Quickly remove browser and download history.",
-  "permissions": ["browsingData", "history", "downloads", "storage", "tabs"],
+  "permissions": ["browsingData", "history", "downloads", "storage", "tabs", "alarms"],
   "action": {
     "default_popup": "index.html",
     "default_title": "Quick Clear",
@@ -13,6 +13,10 @@
       "48": "icons/icon-48.png",
       "128": "icons/icon-128.png"
     }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
   },
   "icons": {
     "16": "icons/icon-16.png",
