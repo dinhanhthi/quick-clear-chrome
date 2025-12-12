@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { SiteIcon } from './Icons';
 
 interface SiteDataCleanerProps {
-  onClean: (domain: string) => void;
-  onCurrentSite?: () => void;
+  onClean: (domain: string, onlyHistoryDownload: boolean) => void;
+  onCurrentSite?: (onlyHistoryDownload: boolean) => void;
 }
 
 const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
@@ -11,11 +11,12 @@ const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
   onCurrentSite,
 }) => {
   const [domain, setDomain] = useState('');
+  const [onlyHistoryDownload, setOnlyHistoryDownload] = useState(true);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (domain.trim()) {
-      onClean(domain.trim());
+      onClean(domain.trim(), onlyHistoryDownload);
       setDomain('');
     }
   };
@@ -37,6 +38,31 @@ const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
         <span style={{ fontWeight: 500, fontSize: '13px', marginLeft: '8px' }}>
           Specific Site Cleaner
         </span>
+      </div>
+
+      {/* Toggle for history/download only */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: '8px',
+          padding: '8px',
+          backgroundColor: 'var(--muted)',
+          borderRadius: 'var(--radius)',
+        }}
+      >
+        <span style={{ fontSize: '12px', color: 'var(--text-color)' }}>
+          Only history and download
+        </span>
+        <label className="switch">
+          <input
+            type="checkbox"
+            checked={onlyHistoryDownload}
+            onChange={(e) => setOnlyHistoryDownload(e.target.checked)}
+          />
+          <span className="slider round"></span>
+        </label>
       </div>
       <form
         onSubmit={handleSubmit}
@@ -82,7 +108,7 @@ const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
           {onCurrentSite && (
             <button
               type="button"
-              onClick={onCurrentSite}
+              onClick={() => onCurrentSite(onlyHistoryDownload)}
               style={{
                 flex: 1,
                 fontSize: '13px',
@@ -100,6 +126,63 @@ const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
           )}
         </div>
       </form>
+
+      <style>{`
+        .switch {
+          position: relative;
+          display: inline-block;
+          width: 30px;
+          height: 16px;
+        }
+        .switch input { 
+          opacity: 0;
+          width: 0;
+          height: 0;
+        }
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: #ccc;
+          -webkit-transition: .4s;
+          transition: .4s;
+        }
+        .slider:before {
+          position: absolute;
+          content: "";
+          height: 14px;
+          width: 14px;
+          left: 3px;
+          bottom: 3px;
+          background-color: white;
+          -webkit-transition: .4s;
+          transition: .4s;
+        }
+        input:checked + .slider {
+          background-color: #2196F3;
+        }
+        input:focus + .slider {
+          box-shadow: 0 0 1px #2196F3;
+        }
+        input:checked + .slider:before {
+          -webkit-transform: translateX(14px);
+          -ms-transform: translateX(14px);
+          transform: translateX(14px);
+        }
+        .slider.round {
+          border-radius: 34px;
+        }
+        .slider.round:before {
+          border-radius: 50%;
+        }
+        @media (prefers-color-scheme: dark) {
+            .slider { background-color: #4a4a4a; }
+            input:checked + .slider { background-color: #4CAF50; } /* Green for active */
+        }
+      `}</style>
     </div>
   );
 };

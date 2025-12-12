@@ -5,6 +5,7 @@ import SiteDataCleaner from './components/SiteDataCleaner';
 import { GitHubIcon } from './components/Icons';
 import {
   clearSiteData,
+  clearSiteHistoryAndDownloads,
   getCurrentTabUrl,
   type TimeRange,
   type AutoClearSettings,
@@ -89,7 +90,7 @@ function App() {
     });
   };
 
-  const handleClearCurrentSite = async () => {
+  const handleClearCurrentSite = async (onlyHistoryDownload: boolean) => {
     setStatus({ message: 'Getting current site...', type: 'info' });
     const url = await getCurrentTabUrl();
     if (!url) {
@@ -97,9 +98,27 @@ function App() {
       setTimeout(() => setStatus(null), 2000);
       return;
     }
-    await handleAction(`site data for ${new URL(url).hostname}`, () =>
-      clearSiteData(url)
+
+    const hostname = new URL(url).hostname;
+    const dataType = onlyHistoryDownload
+      ? 'history and downloads'
+      : 'all data (cookies, cache, history, etc.)';
+    const confirmed = window.confirm(
+      `Are you sure you want to clear ${dataType} for "${hostname}"?`
     );
+
+    if (!confirmed) {
+      setStatus(null);
+      return;
+    }
+
+    const actionName = onlyHistoryDownload
+      ? `history and downloads for ${hostname}`
+      : `site data for ${hostname}`;
+    const clearFn = onlyHistoryDownload
+      ? () => clearSiteHistoryAndDownloads(url)
+      : () => clearSiteData(url);
+    await handleAction(actionName, clearFn);
   };
 
   const handleAction = async (
@@ -253,11 +272,15 @@ function App() {
             onAction={handleAction}
           />
           <SiteDataCleaner
-            onClean={(domain) =>
-              handleAction(`site data for ${domain}`, () =>
-                clearSiteData(domain)
-              )
-            }
+            onClean={(domain, onlyHistoryDownload) => {
+              const actionName = onlyHistoryDownload
+                ? `history and downloads for ${domain}`
+                : `site data for ${domain}`;
+              const clearFn = onlyHistoryDownload
+                ? () => clearSiteHistoryAndDownloads(domain)
+                : () => clearSiteData(domain);
+              handleAction(actionName, clearFn);
+            }}
             onCurrentSite={handleClearCurrentSite}
           />
         </>

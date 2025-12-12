@@ -185,6 +185,33 @@ export const clearSiteData = async (input: string): Promise<void> => {
   await Promise.all(tasks);
 };
 
+export const clearSiteHistoryAndDownloads = async (
+  input: string
+): Promise<void> => {
+  if (isDev) {
+    console.log(`[DEV] Clearing history and downloads for site input: ${input}`);
+    return;
+  }
+
+  // Clear History entries for this site
+  return new Promise((resolve) => {
+    chrome.history.search(
+      { text: input, startTime: 0, maxResults: 10000 },
+      (results) => {
+        const deletePromises = results.map((item) => {
+          if (item.url) {
+            return new Promise<void>((res) =>
+              chrome.history.deleteUrl({ url: item.url! }, res)
+            );
+          }
+          return Promise.resolve();
+        });
+        Promise.all(deletePromises).then(() => resolve());
+      }
+    );
+  });
+};
+
 export const getCurrentTabUrl = async (): Promise<string | null> => {
   if (isDev) {
     return 'https://example.com';

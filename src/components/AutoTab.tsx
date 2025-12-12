@@ -213,8 +213,8 @@ const AutoTab = () => {
         .switch {
           position: relative;
           display: inline-block;
-          width: 34px;
-          height: 20px;
+          width: 30px;
+          height: 16px;
         }
         .switch input { 
           opacity: 0;
