@@ -15,13 +15,17 @@ import packageJson from "../package.json";
 
 function App() {
   const [timeRange, setTimeRange] = useState<TimeRange>("last_hour");
-  const [status, setStatus] = useState<string | null>(null);
+  type StatusType = "success" | "error" | "info";
+  const [status, setStatus] = useState<{
+    message: string;
+    type: StatusType;
+  } | null>(null);
 
   const handleClearCurrentSite = async () => {
-    setStatus("Getting current site...");
+    setStatus({ message: "Getting current site...", type: "info" });
     const url = await getCurrentTabUrl();
     if (!url) {
-      setStatus("Could not get current site.");
+      setStatus({ message: "Could not get current site.", type: "error" });
       setTimeout(() => setStatus(null), 2000);
       return;
     }
@@ -34,14 +38,17 @@ function App() {
     actionName: string,
     actionFn: () => Promise<void>
   ) => {
-    setStatus(`Cleaning ${actionName}...`);
+    setStatus({ message: `Cleaning ${actionName}...`, type: "info" });
     try {
       await actionFn();
-      setStatus(`Successfully cleared ${actionName}!`);
+      setStatus({
+        message: `Successfully cleared ${actionName}!`,
+        type: "success",
+      });
       setTimeout(() => setStatus(null), 2000);
     } catch (error) {
       console.error(error);
-      setStatus("Error occurred.");
+      setStatus({ message: "Error occurred.", type: "error" });
       setTimeout(() => setStatus(null), 2000);
     }
   };
@@ -134,14 +141,19 @@ function App() {
         <div
           style={{
             fontSize: "12px",
-            color: "var(--muted-foreground)",
+            color:
+              status.type === "error"
+                ? "var(--status-error)"
+                : status.type === "success"
+                ? "var(--status-text)"
+                : "var(--muted-foreground)",
             fontWeight: 500,
             textAlign: "center",
             marginTop: "8px",
             minHeight: "18px",
           }}
         >
-          {status}
+          {status.message}
         </div>
       )}
     </div>

@@ -7,6 +7,8 @@
   --primary-foreground: #fafafa;
   --muted: #f4f4f5;
   --muted-foreground: #71717a;
+  --status-text: #16a34a;
+  --status-error: #dc2626;
   --radius: 0.5rem;
   --shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
@@ -21,6 +23,8 @@
     --primary-foreground: #18181b;
     --muted: #27272a;
     --muted-foreground: #a1a1aa;
+    --status-text: #4ade80;
+    --status-error: #f87171;
   }
 }
 
