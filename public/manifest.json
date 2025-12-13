@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Quick Clear",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Quickly remove browser and download history.",
   "permissions": ["browsingData", "history", "downloads", "storage", "tabs", "alarms"],
   "action": {

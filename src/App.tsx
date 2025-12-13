@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import ManualTab from './components/ManualTab';
 import AutoTab from './components/AutoTab';
 import SiteDataCleaner from './components/SiteDataCleaner';
-import { GitHubIcon } from './components/Icons';
+import { GitHubIcon, SunIcon, MoonIcon } from './components/Icons';
 import {
   clearSiteData,
   clearSiteHistoryAndDownloads,
@@ -10,11 +10,13 @@ import {
   type TimeRange,
   type AutoClearSettings,
 } from './utils/chrome-api';
+import { useTheme } from './utils/useTheme';
 import packageJson from '../package.json';
 
 function App() {
   const [activeTab, setActiveTab] = useState<'manual' | 'auto'>('manual');
   const [timeRange, setTimeRange] = useState<TimeRange>('last_hour');
+  const { theme, resolvedTheme, toggleTheme } = useTheme();
 
   // Footer state
   const [autoEnabled, setAutoEnabled] = useState(false);
@@ -204,23 +206,48 @@ function App() {
             v{packageJson.version}
           </span>
         </div>
-        <a
-          href="https://github.com/dinhanhthi/quick-clear-chrome"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            color: 'var(--foreground)',
-            opacity: 0.6,
-            transition: 'opacity 0.2s',
-            textDecoration: 'none',
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.6')}
-        >
-          <GitHubIcon size={18} />
-        </a>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button
+            onClick={toggleTheme}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              background: 'none',
+              border: 'none',
+              color: 'var(--text-color)',
+              opacity: 0.6,
+              transition: 'opacity 0.2s',
+              cursor: 'pointer',
+              padding: 0,
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.6')}
+            title={`Theme: ${theme === 'system' ? `System (${resolvedTheme})` : theme}`}
+          >
+            {resolvedTheme === 'dark' ? (
+              <MoonIcon size={18} />
+            ) : (
+              <SunIcon size={18} />
+            )}
+          </button>
+          <a
+            href="https://github.com/dinhanhthi/quick-clear-chrome"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              color: 'var(--text-color)',
+              opacity: 0.6,
+              transition: 'opacity 0.2s',
+              textDecoration: 'none',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.6')}
+          >
+            <GitHubIcon size={18} />
+          </a>
+        </div>
       </header>
 
       {/* Tabs */}

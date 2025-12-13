@@ -56,7 +56,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
     >
       <div
         style={{
-          marginRight: '0',
+          marginRight: '6px',
           marginBottom: '4px',
           display: 'flex',
           color: 'var(--primary)',
@@ -64,7 +64,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
       >
         {iconWithFixedSize}
       </div>
-      <div style={{ fontSize: '10px', fontWeight: 500, lineHeight: 1.2 }}>
+      <div style={{ fontSize: '14px', fontWeight: 500, lineHeight: 1.2 }}>
         {title.replace('Clear ', '')}
       </div>
     </button>
