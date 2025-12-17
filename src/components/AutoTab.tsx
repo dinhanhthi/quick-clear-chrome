@@ -100,7 +100,7 @@ const AutoTab = () => {
             onChange={(e) => handleUnitChange(e.target.value as any)}
             style={{
               flex: 1,
-              padding: '6px',
+              padding: '6px 24px 6px 6px',
               borderRadius: '6px',
               border: '1px solid var(--border-color)',
               backgroundColor: 'var(--background)',
