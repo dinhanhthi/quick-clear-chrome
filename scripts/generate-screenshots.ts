@@ -56,8 +56,19 @@ function startPlaygroundServer(): ChildProcess {
 
 async function captureScreenshot(
   page: puppeteer.Page,
-  tab: 'manual' | 'auto'
+  tab: 'manual' | 'auto',
+  theme: 'light' | 'dark'
 ): Promise<Buffer> {
+  // Set color scheme
+  await page.emulateMediaFeatures([
+    { name: 'prefers-color-scheme', value: theme },
+  ]);
+
+  // Reload to apply theme properly
+  await page.reload({ waitUntil: 'networkidle0' });
+  await page.waitForSelector('#playground-container');
+  await new Promise((r) => setTimeout(r, 300));
+
   // Click on the appropriate tab
   const tabButton = tab === 'manual' ? 'Manual' : 'Auto';
   await page.evaluate((btnText) => {
@@ -80,14 +91,56 @@ async function captureScreenshot(
   return screenshot as Buffer;
 }
 
+/**
+ * Create a diagonal split image with light mode on top-right and dark mode on bottom-left
+ * The diagonal line goes from bottom-left to top-right
+ */
+async function createDiagonalSplitImage(
+  lightScreenshot: Buffer,
+  darkScreenshot: Buffer
+): Promise<Buffer> {
+  const lightMeta = await sharp(lightScreenshot).metadata();
+  const width = lightMeta.width || POPUP_WIDTH;
+  const height = lightMeta.height || POPUP_HEIGHT;
+
+  // Create diagonal mask SVG
+  // The polygon covers the top-right portion (where light mode will show)
+  // Diagonal from bottom-left (0, height) to top-right (width, 0)
+  const diagonalMaskSvg = Buffer.from(`
+    <svg width="${width}" height="${height}">
+      <polygon points="0,0 ${width},0 ${width},${height}" fill="white"/>
+    </svg>
+  `);
+
+  // Apply diagonal mask to light screenshot (show top-right portion)
+  const maskedLight = await sharp(lightScreenshot)
+    .composite([{
+      input: diagonalMaskSvg,
+      blend: 'dest-in'
+    }])
+    .png()
+    .toBuffer();
+
+  // Combine: dark as base, light overlay with diagonal mask
+  const combined = await sharp(darkScreenshot)
+    .composite([{
+      input: maskedLight,
+      blend: 'over'
+    }])
+    .png()
+    .toBuffer();
+
+  return combined;
+}
+
 async function createCombinedScreenshot(
-  manualScreenshot: Buffer,
-  autoScreenshot: Buffer,
+  manualDiagonal: Buffer,
+  autoDiagonal: Buffer,
   outputPath: string
 ): Promise<void> {
   // Get dimensions of screenshots
-  const manualMeta = await sharp(manualScreenshot).metadata();
-  const autoMeta = await sharp(autoScreenshot).metadata();
+  const manualMeta = await sharp(manualDiagonal).metadata();
+  const autoMeta = await sharp(autoDiagonal).metadata();
 
   const screenshotWidth = Math.max(manualMeta.width || POPUP_WIDTH, autoMeta.width || POPUP_WIDTH);
   const screenshotHeight = Math.max(manualMeta.height || POPUP_HEIGHT, autoMeta.height || POPUP_HEIGHT);
@@ -117,7 +170,7 @@ async function createCombinedScreenshot(
     </svg>
   `);
 
-  const roundedManual = await sharp(manualScreenshot)
+  const roundedManual = await sharp(manualDiagonal)
     .resize(screenshotWidth, screenshotHeight)
     .composite([{
       input: roundedMask,
@@ -126,7 +179,7 @@ async function createCombinedScreenshot(
     .png()
     .toBuffer();
 
-  const roundedAuto = await sharp(autoScreenshot)
+  const roundedAuto = await sharp(autoDiagonal)
     .resize(screenshotWidth, screenshotHeight)
     .composite([{
       input: roundedMask,
@@ -187,30 +240,37 @@ async function main() {
       deviceScaleFactor: DEVICE_SCALE_FACTOR, // 2x for high quality
     });
 
-    // Force light mode for consistent screenshots
-    await page.emulateMediaFeatures([
-      { name: 'prefers-color-scheme', value: 'light' },
-    ]);
-
     console.log('📸 Navigating to playground...');
     await page.goto(PLAYGROUND_URL, { waitUntil: 'networkidle0' });
-
-    // Wait for the app to fully load
     await page.waitForSelector('#playground-container');
     await new Promise((r) => setTimeout(r, 500));
 
-    console.log('📷 Capturing Manual tab...');
-    const manualScreenshot = await captureScreenshot(page, 'manual');
+    // Capture all 4 variations
+    console.log('📷 Capturing Manual tab (light)...');
+    const manualLight = await captureScreenshot(page, 'manual', 'light');
 
-    console.log('📷 Capturing Auto tab...');
-    const autoScreenshot = await captureScreenshot(page, 'auto');
+    console.log('📷 Capturing Manual tab (dark)...');
+    const manualDark = await captureScreenshot(page, 'manual', 'dark');
+
+    console.log('📷 Capturing Auto tab (light)...');
+    const autoLight = await captureScreenshot(page, 'auto', 'light');
+
+    console.log('📷 Capturing Auto tab (dark)...');
+    const autoDark = await captureScreenshot(page, 'auto', 'dark');
+
+    // Create diagonal split images
+    console.log('🎨 Creating diagonal split for Manual tab...');
+    const manualDiagonal = await createDiagonalSplitImage(manualLight, manualDark);
+
+    console.log('🎨 Creating diagonal split for Auto tab...');
+    const autoDiagonal = await createDiagonalSplitImage(autoLight, autoDark);
 
     // Output path
     const outputPath = path.join(process.cwd(), 'public', 'screenshot.png');
     const distOutputPath = path.join(process.cwd(), 'dist', 'screenshot.png');
 
     console.log('🎨 Creating combined screenshot...');
-    await createCombinedScreenshot(manualScreenshot, autoScreenshot, outputPath);
+    await createCombinedScreenshot(manualDiagonal, autoDiagonal, outputPath);
 
     // Also copy to dist if it exists
     try {
@@ -234,4 +294,3 @@ async function main() {
 }
 
 main();
-
