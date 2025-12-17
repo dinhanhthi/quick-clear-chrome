@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && npm run screenshot",
+    "build:no-screenshot": "tsc -b && vite build",
     "watch": "vite build --watch",
     "lint": "eslint .",
     "prettier": "prettier --write .",
@@ -13,7 +14,9 @@
     "version": "sh ./scripts/update_version.sh",
     "zip": "sh ./scripts/zip_extension.sh",
     "playground": "vite --config vite.playground.config.ts --open",
-    "playground:clean": "lsof -ti:5174 | xargs kill -9 2>/dev/null || true && npm run playground"
+    "playground:clean": "lsof -ti:5174 | xargs kill -9 2>/dev/null || true && npm run playground",
+    "playground:headless": "vite --config vite.playground.config.ts",
+    "screenshot": "npx tsx scripts/generate-screenshots.ts"
   },
   "dependencies": {
     "react": "^19.2.0",
@@ -31,6 +34,9 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
     "prettier": "^3.7.4",
+    "puppeteer": "^24.0.0",
+    "sharp": "^0.33.5",
+    "tsx": "^4.19.2",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
     "vite": "^7.2.4"
