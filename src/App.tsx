@@ -163,6 +163,7 @@ function App() {
         paddingBottom: autoEnabled ? '60px' : '16px',
         position: 'relative',
         minHeight: '400px',
+        backgroundColor: 'var(--bg-color)',
       }}
     >
       <header
