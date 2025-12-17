@@ -11,7 +11,7 @@ const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
   onCurrentSite,
 }) => {
   const [domain, setDomain] = useState('');
-  const [onlyHistoryDownload, setOnlyHistoryDownload] = useState(true);
+  const [onlyHistoryDownload, setOnlyHistoryDownload] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,7 +59,7 @@ const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
           <span className="slider round"></span>
         </label>
         <span style={{ fontSize: '12px', color: 'var(--text-color)' }}>
-          Only history and download
+          Only history and DL, otherwise all data.
         </span>
       </div>
       <form
