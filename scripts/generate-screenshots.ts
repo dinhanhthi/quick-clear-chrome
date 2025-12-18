@@ -2,6 +2,7 @@ import puppeteer, { Page, Browser } from 'puppeteer';
 import sharp from 'sharp';
 import { spawn, ChildProcess } from 'child_process';
 import path from 'path';
+import os from 'os';
 
 const PLAYGROUND_PORT = 5174;
 const PLAYGROUND_URL = `http://localhost:${PLAYGROUND_PORT}`;
@@ -227,9 +228,20 @@ async function main() {
     }
 
     console.log('🎭 Launching browser...');
+    // Find chrome-headless-shell in puppeteer cache
+    const cacheDir = path.join(os.homedir(), '.cache', 'puppeteer', 'chrome-headless-shell');
+    const fs = await import('fs');
+    const versions = fs.readdirSync(cacheDir).filter((d: string) => d.startsWith('mac'));
+    if (versions.length === 0) {
+      throw new Error('chrome-headless-shell not found. Run: npx puppeteer browsers install chrome-headless-shell');
+    }
+    const latestVersion = versions.sort().pop()!;
+    const shellDir = fs.readdirSync(path.join(cacheDir, latestVersion))[0];
+    const executablePath = path.join(cacheDir, latestVersion, shellDir, 'chrome-headless-shell');
+
     browser = await puppeteer.launch({
-      headless: true,
-      channel: 'chrome', // Use installed Chrome instead of downloading Chromium
+      headless: 'shell',
+      executablePath,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
 

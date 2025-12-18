@@ -11,7 +11,8 @@ const ALARM_NAME = 'auto-clear-alarm';
 const updateBadge = (settings: AutoClearSettings) => {
   if (settings.enabled) {
     // Show green dot when auto clean is ON (using space for smallest badge)
-    chrome.action.setBadgeText({ text: 'ao' });
+    chrome.action.setBadgeText({ text: '★' });
+    chrome.action.setBadgeTextColor({ color: '#ffffff' });
     chrome.action.setBadgeBackgroundColor({ color: '#22c55e' }); // Green color
     chrome.action.setTitle({ title: 'Quick Clear - Auto Clean ON' });
   } else {

@@ -17,13 +17,27 @@ A modern, fast extension to clear browser history, downloads, and site-specific 
 
 ## Development
 
+### Setup
+
 ```bash
 npm install
-npm run dev   # UI development
-npm run build # Build extension to dist/
-npm run version 1.1.0 # Update version in package.json and manifest.json
-npm run zip   # Create a .zip file for Chrome Web Store upload
-npm run prettier # Format code
+
+# Required for screenshot generation (headless browser)
+npx puppeteer browsers install chrome-headless-shell
+```
+
+### Commands
+
+```bash
+npm run dev        # UI development with hot reload
+npm run build      # Build extension to dist/ (includes screenshot generation)
+npm run build:no-screenshot  # Build without regenerating screenshot
+npm run playground # Preview popup UI in browser
+npm run screenshot # Regenerate screenshot.png
+npm run version 1.1.0  # Update version in package.json and manifest.json
+npm run zip        # Create .zip for Chrome Web Store upload
+npm run prettier   # Format code
+npm run lint       # Run ESLint
 ```
 
 ## Installation
