@@ -86,12 +86,13 @@ const AutoTab = () => {
               handleIntervalChange(parseInt(e.target.value) || 1)
             }
             style={{
-              padding: '6px',
-              borderRadius: '6px',
+              padding: '10px',
+              borderRadius: 'var(--radius)',
               border: '1px solid var(--border-color)',
-              width: '60px',
+              width: '70px',
               backgroundColor: 'var(--background)',
               color: 'var(--foreground)',
+              fontSize: '14px',
             }}
             disabled={!settings.enabled}
           />
@@ -100,11 +101,14 @@ const AutoTab = () => {
             onChange={(e) => handleUnitChange(e.target.value as any)}
             style={{
               flex: 1,
-              padding: '6px 24px 6px 6px',
-              borderRadius: '6px',
+              padding: '10px',
+              borderRadius: 'var(--radius)',
               border: '1px solid var(--border-color)',
               backgroundColor: 'var(--background)',
               color: 'var(--foreground)',
+              fontSize: '14px',
+              appearance: 'none',
+              outline: 'none',
             }}
             disabled={!settings.enabled}
           >

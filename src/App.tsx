@@ -225,7 +225,7 @@ function App() {
             onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.6')}
             title={`Theme: ${theme === 'system' ? `System (${resolvedTheme})` : theme}`}
           >
-            {resolvedTheme === 'dark' ? (
+            {resolvedTheme === 'light' ? (
               <MoonIcon size={18} />
             ) : (
               <SunIcon size={18} />

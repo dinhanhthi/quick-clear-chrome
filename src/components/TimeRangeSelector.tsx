@@ -44,28 +44,6 @@ const TimeRangeSelector: React.FC<TimeRangeSelectorProps> = ({
           <option value="last_4weeks">Last 4 Weeks</option>
           <option value="all_time">All Time</option>
         </select>
-        <div
-          style={{
-            position: 'absolute',
-            right: '12px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            pointerEvents: 'none',
-          }}
-        >
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="m6 9 6 6 6-6" />
-          </svg>
-        </div>
       </div>
     </div>
   );
