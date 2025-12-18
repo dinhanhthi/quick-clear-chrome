@@ -2,6 +2,8 @@
 
 A modern, fast extension to clear browser history, downloads, and site-specific data (cookies, storage).
 
+⏬ Download the latest version [here](https://github.com/dinhanhthi/quick-clear-chrome/releases/download/v1.2.2/quick-clear-chrome-v1.2.2.zip).
+
 ## Features
 
 - **Manual Clear**: Clear history, downloads, or everything with customizable time ranges (last hour, 24 hours, 7 days, 4 weeks, all time)
@@ -26,7 +28,7 @@ npm run prettier # Format code
 
 ## Installation
 
-1. If you just want to use the latest version, extract the zip file from `zip/` folder and load it in Chrome.
+1. If you just want to use [the latest version](https://github.com/dinhanhthi/quick-clear-chrome/releases/download/v1.2.2/quick-clear-chrome-v1.2.2.zip), extract the zip file from `zip/` folder and load it in Chrome.
 2. Open `chrome://extensions`
 3. Enable **Developer mode**
 4. Click **Load unpacked**
