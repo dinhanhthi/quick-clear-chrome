@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer';
+import puppeteer, { Page, Browser } from 'puppeteer';
 import sharp from 'sharp';
 import { spawn, ChildProcess } from 'child_process';
 import path from 'path';
@@ -37,7 +37,7 @@ async function waitForServer(
 
 function startPlaygroundServer(): ChildProcess {
   console.log('🚀 Starting playground server...');
-  const server = spawn('npm', ['run', 'playground'], {
+  const server = spawn('npm', ['run', 'playground:headless'], {
     cwd: process.cwd(),
     stdio: ['ignore', 'pipe', 'pipe'],
     shell: true,
@@ -55,7 +55,7 @@ function startPlaygroundServer(): ChildProcess {
 }
 
 async function captureScreenshot(
-  page: puppeteer.Page,
+  page: Page,
   tab: 'manual' | 'auto',
   theme: 'light' | 'dark'
 ): Promise<Buffer> {
@@ -210,7 +210,7 @@ async function createCombinedScreenshot(
 
 async function main() {
   let server: ChildProcess | null = null;
-  let browser: puppeteer.Browser | null = null;
+  let browser: Browser | null = null;
 
   try {
     // Check if server is already running
