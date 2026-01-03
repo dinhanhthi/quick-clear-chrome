@@ -65,7 +65,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
         console.log(`[QuickClear] Auto-cleaning with range: ${timeRange}`);
 
         const tasks: Promise<void>[] = [];
-        
+
         if (settings.clearEverything) {
           // Clear everything takes precedence
           tasks.push(clearEverything(timeRange));
@@ -78,7 +78,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
             tasks.push(clearDownloadHistory(timeRange));
           }
         }
-        
+
         Promise.all(tasks).then(() => {
           console.log('[QuickClear] Auto-clear finished.');
           chrome.storage.local.set({ lastAutoClearTime: Date.now() });
@@ -90,21 +90,21 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 
 // Initial check on load (e.g. browser restart)
 chrome.runtime.onInstalled.addListener(() => {
-    chrome.storage.local.get(['autoClearSettings'], (result) => {
-        if (result.autoClearSettings) {
-           const settings = result.autoClearSettings as AutoClearSettings;
-           updateAlarm(settings);
-           updateBadge(settings);
-        }
-    });
+  chrome.storage.local.get(['autoClearSettings'], (result) => {
+    if (result.autoClearSettings) {
+      const settings = result.autoClearSettings as AutoClearSettings;
+      updateAlarm(settings);
+      updateBadge(settings);
+    }
+  });
 });
 
 chrome.runtime.onStartup.addListener(() => {
-    chrome.storage.local.get(['autoClearSettings'], (result) => {
-        if (result.autoClearSettings) {
-           const settings = result.autoClearSettings as AutoClearSettings;
-           updateAlarm(settings);
-           updateBadge(settings);
-        }
-    });
+  chrome.storage.local.get(['autoClearSettings'], (result) => {
+    if (result.autoClearSettings) {
+      const settings = result.autoClearSettings as AutoClearSettings;
+      updateAlarm(settings);
+      updateBadge(settings);
+    }
+  });
 });

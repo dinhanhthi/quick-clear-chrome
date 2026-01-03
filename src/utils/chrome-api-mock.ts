@@ -25,7 +25,10 @@ const mockAlarms: Record<string, chrome.alarms.Alarm> = {
 
 // Storage change listeners
 const storageListeners: Array<
-  (changes: { [key: string]: chrome.storage.StorageChange }, area: string) => void
+  (
+    changes: { [key: string]: chrome.storage.StorageChange },
+    area: string
+  ) => void
 > = [];
 
 // Mock chrome.storage.local
@@ -36,7 +39,7 @@ export const mockChromeStorageLocal = {
   ) => {
     console.log('[MOCK] chrome.storage.local.get', keys);
     const result: { [key: string]: any } = {};
-    
+
     if (keys === null) {
       Object.assign(result, mockStorage);
     } else if (typeof keys === 'string') {
@@ -50,14 +53,14 @@ export const mockChromeStorageLocal = {
         }
       });
     }
-    
+
     setTimeout(() => callback(result), 10);
   },
 
   set: (items: { [key: string]: any }, callback?: () => void) => {
     console.log('[MOCK] chrome.storage.local.set', items);
     const changes: { [key: string]: chrome.storage.StorageChange } = {};
-    
+
     Object.keys(items).forEach((key) => {
       changes[key] = {
         oldValue: mockStorage[key],
@@ -65,12 +68,12 @@ export const mockChromeStorageLocal = {
       };
       mockStorage[key] = items[key];
     });
-    
+
     // Notify listeners
     storageListeners.forEach((listener) => {
       listener(changes, 'local');
     });
-    
+
     if (callback) setTimeout(callback, 10);
   },
 };
@@ -114,7 +117,9 @@ export const mockChromeAlarms = {
     console.log('[MOCK] chrome.alarms.create', name, alarmInfo);
     mockAlarms[name] = {
       name,
-      scheduledTime: alarmInfo.when || Date.now() + (alarmInfo.delayInMinutes || 0) * 60 * 1000,
+      scheduledTime:
+        alarmInfo.when ||
+        Date.now() + (alarmInfo.delayInMinutes || 0) * 60 * 1000,
       periodInMinutes: alarmInfo.periodInMinutes,
     };
   },
@@ -156,12 +161,18 @@ export const mockChromeTabs = {
 
 // Mock chrome.browsingData
 export const mockChromeBrowsingData = {
-  removeHistory: (options: chrome.browsingData.RemovalOptions, callback?: () => void) => {
+  removeHistory: (
+    options: chrome.browsingData.RemovalOptions,
+    callback?: () => void
+  ) => {
     console.log('[MOCK] chrome.browsingData.removeHistory', options);
     if (callback) setTimeout(callback, 100);
   },
 
-  removeDownloads: (options: chrome.browsingData.RemovalOptions, callback?: () => void) => {
+  removeDownloads: (
+    options: chrome.browsingData.RemovalOptions,
+    callback?: () => void
+  ) => {
     console.log('[MOCK] chrome.browsingData.removeDownloads', options);
     if (callback) setTimeout(callback, 100);
   },

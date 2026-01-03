@@ -189,7 +189,9 @@ export const clearSiteHistoryAndDownloads = async (
   input: string
 ): Promise<void> => {
   if (isDev()) {
-    console.log(`[DEV] Clearing history and downloads for site input: ${input}`);
+    console.log(
+      `[DEV] Clearing history and downloads for site input: ${input}`
+    );
     return;
   }
 

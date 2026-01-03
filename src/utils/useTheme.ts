@@ -25,7 +25,8 @@ export const useTheme = () => {
 
       if (theme === 'system') {
         // Use system preference
-        effectiveTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+        effectiveTheme = window.matchMedia('(prefers-color-scheme: dark)')
+          .matches
           ? 'dark'
           : 'light';
       } else {
@@ -53,9 +54,7 @@ export const useTheme = () => {
 
   const toggleTheme = () => {
     const newTheme: Theme =
-      theme === 'system' ? 'light' :
-      theme === 'light' ? 'dark' :
-      'system';
+      theme === 'system' ? 'light' : theme === 'light' ? 'dark' : 'system';
 
     setTheme(newTheme);
 

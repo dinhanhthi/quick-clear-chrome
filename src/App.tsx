@@ -10,6 +10,10 @@ import {
   type TimeRange,
   type AutoClearSettings,
 } from './utils/chrome-api';
+
+interface ManualSettings {
+  timeRange: TimeRange;
+}
 import { useTheme } from './utils/useTheme';
 import packageJson from '../package.json';
 
@@ -28,6 +32,26 @@ function App() {
     message: string;
     type: StatusType;
   } | null>(null);
+
+  // Load saved manual settings on mount
+  useEffect(() => {
+    if (chrome?.storage?.local) {
+      chrome.storage.local.get(['manualSettings'], (result) => {
+        if (result.manualSettings) {
+          const settings = result.manualSettings as ManualSettings;
+          setTimeRange(settings.timeRange);
+        }
+      });
+    }
+  }, []);
+
+  // Save manual settings when time range changes
+  useEffect(() => {
+    if (chrome?.storage?.local) {
+      const settings: ManualSettings = { timeRange };
+      chrome.storage.local.set({ manualSettings: settings });
+    }
+  }, [timeRange]);
 
   useEffect(() => {
     const loadFooterData = () => {
@@ -299,9 +323,24 @@ function App() {
             fontWeight: 500,
             cursor: 'pointer',
             transition: 'all 0.2s',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px',
           }}
         >
           Auto
+          {autoEnabled && (
+            <span
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                backgroundColor: '#4CAF50',
+                display: 'inline-block',
+              }}
+            />
+          )}
         </button>
       </div>
 
@@ -371,6 +410,8 @@ function App() {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'left',
+              color: '#4CAF50',
+              fontWeight: 600,
             }}
           >
             Auto Clean ON

@@ -19,10 +19,7 @@ const BORDER_RADIUS = 24; // Border radius (scaled)
 const GRADIENT_START = '#667eea';
 const GRADIENT_END = '#764ba2';
 
-async function waitForServer(
-  url: string,
-  timeout = 30000
-): Promise<boolean> {
+async function waitForServer(url: string, timeout = 30000): Promise<boolean> {
   const start = Date.now();
   while (Date.now() - start < timeout) {
     try {
@@ -115,19 +112,23 @@ async function createDiagonalSplitImage(
 
   // Apply diagonal mask to light screenshot (show top-right portion)
   const maskedLight = await sharp(lightScreenshot)
-    .composite([{
-      input: diagonalMaskSvg,
-      blend: 'dest-in'
-    }])
+    .composite([
+      {
+        input: diagonalMaskSvg,
+        blend: 'dest-in',
+      },
+    ])
     .png()
     .toBuffer();
 
   // Combine: dark as base, light overlay with diagonal mask
   const combined = await sharp(darkScreenshot)
-    .composite([{
-      input: maskedLight,
-      blend: 'over'
-    }])
+    .composite([
+      {
+        input: maskedLight,
+        blend: 'over',
+      },
+    ])
     .png()
     .toBuffer();
 
@@ -143,8 +144,14 @@ async function createCombinedScreenshot(
   const manualMeta = await sharp(manualDiagonal).metadata();
   const autoMeta = await sharp(autoDiagonal).metadata();
 
-  const screenshotWidth = Math.max(manualMeta.width || POPUP_WIDTH, autoMeta.width || POPUP_WIDTH);
-  const screenshotHeight = Math.max(manualMeta.height || POPUP_HEIGHT, autoMeta.height || POPUP_HEIGHT);
+  const screenshotWidth = Math.max(
+    manualMeta.width || POPUP_WIDTH,
+    autoMeta.width || POPUP_WIDTH
+  );
+  const screenshotHeight = Math.max(
+    manualMeta.height || POPUP_HEIGHT,
+    autoMeta.height || POPUP_HEIGHT
+  );
 
   // Calculate final canvas size
   const canvasWidth = screenshotWidth * 2 + GAP + PADDING * 2;
@@ -173,19 +180,23 @@ async function createCombinedScreenshot(
 
   const roundedManual = await sharp(manualDiagonal)
     .resize(screenshotWidth, screenshotHeight)
-    .composite([{
-      input: roundedMask,
-      blend: 'dest-in'
-    }])
+    .composite([
+      {
+        input: roundedMask,
+        blend: 'dest-in',
+      },
+    ])
     .png()
     .toBuffer();
 
   const roundedAuto = await sharp(autoDiagonal)
     .resize(screenshotWidth, screenshotHeight)
-    .composite([{
-      input: roundedMask,
-      blend: 'dest-in'
-    }])
+    .composite([
+      {
+        input: roundedMask,
+        blend: 'dest-in',
+      },
+    ])
     .png()
     .toBuffer();
 
@@ -229,15 +240,29 @@ async function main() {
 
     console.log('🎭 Launching browser...');
     // Find chrome-headless-shell in puppeteer cache
-    const cacheDir = path.join(os.homedir(), '.cache', 'puppeteer', 'chrome-headless-shell');
+    const cacheDir = path.join(
+      os.homedir(),
+      '.cache',
+      'puppeteer',
+      'chrome-headless-shell'
+    );
     const fs = await import('fs');
-    const versions = fs.readdirSync(cacheDir).filter((d: string) => d.startsWith('mac'));
+    const versions = fs
+      .readdirSync(cacheDir)
+      .filter((d: string) => d.startsWith('mac'));
     if (versions.length === 0) {
-      throw new Error('chrome-headless-shell not found. Run: npx puppeteer browsers install chrome-headless-shell');
+      throw new Error(
+        'chrome-headless-shell not found. Run: npx puppeteer browsers install chrome-headless-shell'
+      );
     }
     const latestVersion = versions.sort().pop()!;
     const shellDir = fs.readdirSync(path.join(cacheDir, latestVersion))[0];
-    const executablePath = path.join(cacheDir, latestVersion, shellDir, 'chrome-headless-shell');
+    const executablePath = path.join(
+      cacheDir,
+      latestVersion,
+      shellDir,
+      'chrome-headless-shell'
+    );
 
     browser = await puppeteer.launch({
       headless: 'shell',
@@ -272,7 +297,10 @@ async function main() {
 
     // Create diagonal split images
     console.log('🎨 Creating diagonal split for Manual tab...');
-    const manualDiagonal = await createDiagonalSplitImage(manualLight, manualDark);
+    const manualDiagonal = await createDiagonalSplitImage(
+      manualLight,
+      manualDark
+    );
 
     console.log('🎨 Creating diagonal split for Auto tab...');
     const autoDiagonal = await createDiagonalSplitImage(autoLight, autoDark);
