@@ -15,6 +15,15 @@ export interface AutoClearSettings {
   clearEverything: boolean;
 }
 
+export interface IgnoreListItem {
+  url: string;
+  addedAt: number; // timestamp
+}
+
+export interface IgnoreListSettings {
+  items: IgnoreListItem[];
+}
+
 const getSinceTimestamp = (range: TimeRange): number => {
   const now = Date.now();
   switch (range) {
@@ -48,16 +57,72 @@ const getOrigin = (input: string): string | null => {
 
 const isDev = () => !chrome?.browsingData;
 
+// Check if a URL matches any pattern in the ignore list
+const isUrlIgnored = (url: string, ignoreList: IgnoreListItem[]): boolean => {
+  if (!ignoreList || ignoreList.length === 0) return false;
+  
+  try {
+    const urlObj = new URL(url);
+    const urlHost = urlObj.hostname;
+    
+    return ignoreList.some((item) => {
+      const pattern = item.url.trim();
+      if (!pattern) return false;
+      
+      // Exact URL match
+      if (url === pattern || url.startsWith(pattern)) return true;
+      
+      // Domain/hostname match
+      try {
+        // Try parsing as URL
+        const patternUrl = new URL(pattern.match(/^[a-zA-Z]+:\/\//) ? pattern : `https://${pattern}`);
+        const patternHost = patternUrl.hostname;
+        
+        // Match exact hostname or subdomain
+        return urlHost === patternHost || urlHost.endsWith(`.${patternHost}`);
+      } catch {
+        // If not a valid URL, treat as domain pattern
+        return urlHost === pattern || urlHost.endsWith(`.${pattern}`);
+      }
+    });
+  } catch {
+    return false;
+  }
+};
+
 export const clearBrowserHistory = async (range: TimeRange): Promise<void> => {
   if (isDev()) {
     console.log(`[DEV] Clearing browser history for range: ${range}`);
     return;
   }
 
+  // Load ignore list
+  const ignoreList = await loadIgnoreList();
+  
+  if (ignoreList.items.length === 0) {
+    // No ignore list - use fast bulk delete
+    const since = getSinceTimestamp(range);
+    return new Promise((resolve) => {
+      chrome.browsingData.removeHistory({ since }, resolve);
+    });
+  }
+  
+  // With ignore list - fetch and filter individually
   const since = getSinceTimestamp(range);
-  // Using browsingData to clear history
   return new Promise((resolve) => {
-    chrome.browsingData.removeHistory({ since }, resolve);
+    chrome.history.search(
+      { text: '', startTime: since, maxResults: 100000 },
+      (results) => {
+        const deletePromises = results
+          .filter((item) => item.url && !isUrlIgnored(item.url, ignoreList.items))
+          .map((item) => {
+            return new Promise<void>((res) =>
+              chrome.history.deleteUrl({ url: item.url! }, res)
+            );
+          });
+        Promise.all(deletePromises).then(() => resolve());
+      }
+    );
   });
 };
 
@@ -81,6 +146,8 @@ export const clearHistoryAndDownloads = async (
     return;
   }
 
+  // clearBrowserHistory already respects ignore list
+  // Downloads API doesn't support exclusions, so we clear everything
   await Promise.all([clearBrowserHistory(range), clearDownloadHistory(range)]);
 };
 
@@ -195,19 +262,21 @@ export const clearSiteHistoryAndDownloads = async (
     return;
   }
 
+  // Load ignore list
+  const ignoreList = await loadIgnoreList();
+  
   // Clear History entries for this site
   return new Promise((resolve) => {
     chrome.history.search(
       { text: input, startTime: 0, maxResults: 10000 },
       (results) => {
-        const deletePromises = results.map((item) => {
-          if (item.url) {
+        const deletePromises = results
+          .filter((item) => item.url && !isUrlIgnored(item.url, ignoreList.items))
+          .map((item) => {
             return new Promise<void>((res) =>
               chrome.history.deleteUrl({ url: item.url! }, res)
             );
-          }
-          return Promise.resolve();
-        });
+          });
         Promise.all(deletePromises).then(() => resolve());
       }
     );
@@ -221,4 +290,76 @@ export const getCurrentTabUrl = async (): Promise<string | null> => {
 
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   return tab?.url || null;
+};
+
+// Ignore List Management
+export const loadIgnoreList = async (): Promise<IgnoreListSettings> => {
+  if (isDev()) {
+    // Return mock data in dev mode
+    const mockData = (window as any).__mockIgnoreList;
+    if (mockData) return mockData;
+    return { items: [] };
+  }
+
+  return new Promise((resolve) => {
+    chrome.storage.local.get(['ignoreList'], (result) => {
+      const ignoreList = result.ignoreList as IgnoreListSettings | undefined;
+      resolve(ignoreList || { items: [] });
+    });
+  });
+};
+
+export const saveIgnoreList = async (ignoreList: IgnoreListSettings): Promise<void> => {
+  if (isDev()) {
+    console.log('[DEV] Saving ignore list:', ignoreList);
+    (window as any).__mockIgnoreList = ignoreList;
+    return;
+  }
+
+  return new Promise((resolve) => {
+    chrome.storage.local.set({ ignoreList }, resolve);
+  });
+};
+
+export const addToIgnoreList = async (url: string): Promise<void> => {
+  const ignoreList = await loadIgnoreList();
+  const normalizedUrl = url.trim();
+  
+  // Check if already exists
+  if (ignoreList.items.some((item) => item.url === normalizedUrl)) {
+    return; // Already in list
+  }
+  
+  ignoreList.items.push({
+    url: normalizedUrl,
+    addedAt: Date.now(),
+  });
+  
+  await saveIgnoreList(ignoreList);
+};
+
+export const removeFromIgnoreList = async (url: string): Promise<void> => {
+  const ignoreList = await loadIgnoreList();
+  ignoreList.items = ignoreList.items.filter((item) => item.url !== url);
+  await saveIgnoreList(ignoreList);
+};
+
+export const importIgnoreListFromText = async (text: string): Promise<number> => {
+  const ignoreList = await loadIgnoreList();
+  const lines = text.split('\n').map((line) => line.trim()).filter((line) => line.length > 0);
+  
+  let addedCount = 0;
+  for (const line of lines) {
+    // Skip if already exists
+    if (!ignoreList.items.some((item) => item.url === line)) {
+      ignoreList.items.push({
+        url: line,
+        addedAt: Date.now(),
+      });
+      addedCount++;
+    }
+  }
+  
+  await saveIgnoreList(ignoreList);
+  return addedCount;
 };

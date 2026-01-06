@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# AI things
+.github/copilot-instructions.md
+CLAUDE.md
+GEMINI.md
+.cursor/

@@ -1,4 +1,4 @@
-import type { AutoClearSettings } from './chrome-api';
+import type { AutoClearSettings, IgnoreListSettings } from './chrome-api';
 
 // Mock storage for chrome.storage.local
 const mockStorage: Record<string, any> = {
@@ -12,6 +12,18 @@ const mockStorage: Record<string, any> = {
     clearEverything: false,
   } as AutoClearSettings,
   lastAutoClearTime: Date.now() - 15 * 60 * 1000, // 15 minutes ago
+  ignoreList: {
+    items: [
+      {
+        url: 'github.com',
+        addedAt: Date.now() - 7 * 24 * 60 * 60 * 1000, // 7 days ago
+      },
+      {
+        url: 'https://stackoverflow.com',
+        addedAt: Date.now() - 2 * 24 * 60 * 60 * 1000, // 2 days ago
+      },
+    ],
+  } as IgnoreListSettings,
 };
 
 // Mock alarms

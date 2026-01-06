@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import ManualTab from './components/ManualTab';
 import AutoTab from './components/AutoTab';
 import SiteDataCleaner from './components/SiteDataCleaner';
+import IgnoreListManager from './components/IgnoreListManager';
 import { GitHubIcon, SunIcon, MoonIcon } from './components/Icons';
 import {
   clearSiteData,
@@ -18,7 +19,7 @@ import { useTheme } from './utils/useTheme';
 import packageJson from '../package.json';
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'manual' | 'auto'>('manual');
+  const [activeTab, setActiveTab] = useState<'manual' | 'auto' | 'ignore'>('manual');
   const [timeRange, setTimeRange] = useState<TimeRange>('last_hour');
   const { theme, resolvedTheme, toggleTheme } = useTheme();
 
@@ -342,6 +343,28 @@ function App() {
             />
           )}
         </button>
+        <button
+          onClick={() => setActiveTab('ignore')}
+          style={{
+            flex: 1,
+            padding: '8px',
+            background: 'none',
+            border: 'none',
+            borderBottom:
+              activeTab === 'ignore'
+                ? '2px solid var(--primary)'
+                : '2px solid transparent',
+            color:
+              activeTab === 'ignore'
+                ? 'var(--foreground)'
+                : 'var(--muted-foreground)',
+            fontWeight: 500,
+            cursor: 'pointer',
+            transition: 'all 0.2s',
+          }}
+        >
+          Ignore List
+        </button>
       </div>
 
       {activeTab === 'manual' ? (
@@ -364,8 +387,10 @@ function App() {
             onCurrentSite={handleClearCurrentSite}
           />
         </>
-      ) : (
+      ) : activeTab === 'auto' ? (
         <AutoTab />
+      ) : (
+        <IgnoreListManager />
       )}
 
       {status && (
