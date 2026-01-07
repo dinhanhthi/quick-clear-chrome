@@ -25,6 +25,10 @@ const ManualTab = ({
   onTimeRangeChange,
   onAction,
 }: ManualTabProps) => {
+  // // Detect OS for keyboard shortcuts
+  const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+  const modKey = isMac ? 'Cmd' : 'Ctrl';
+
   const handleClearEverything = () => {
     const confirmed = window.confirm(
       'Are you sure you want to clear EVERYTHING?\n\n' +
@@ -60,6 +64,7 @@ const ManualTab = ({
             onAction('history', () => clearBrowserHistory(timeRange))
           }
           variant="primary"
+          shortcut={`${modKey}+Shift+J`}
         />
 
         <ActionButton
@@ -70,6 +75,7 @@ const ManualTab = ({
             onAction('downloads', () => clearDownloadHistory(timeRange))
           }
           variant="info"
+          shortcut={`${modKey}+Shift+K`}
         />
 
         <ActionButton
@@ -82,6 +88,7 @@ const ManualTab = ({
             )
           }
           variant="primary"
+          shortcut={`${modKey}+Shift+U`}
         />
 
         <ActionButton

@@ -2,7 +2,9 @@ import {
   clearBrowserHistory,
   clearDownloadHistory,
   clearEverything,
+  clearHistoryAndDownloads,
   type AutoClearSettings,
+  type TimeRange,
 } from './utils/chrome-api';
 
 const ALARM_NAME = 'auto-clear-alarm';
@@ -108,3 +110,48 @@ chrome.runtime.onStartup.addListener(() => {
     }
   });
 });
+
+// Handle keyboard shortcuts
+chrome.commands.onCommand.addListener((command) => {
+  console.log(`[QuickClear] Command triggered: ${command}`);
+
+  // Get the current time range setting from manual settings
+  chrome.storage.local.get(['manualSettings'], (result) => {
+    const timeRange: TimeRange = (result.manualSettings as { timeRange?: TimeRange })?.timeRange || 'last_hour';
+    console.log(`[QuickClear] Using time range: ${timeRange}`);
+
+    switch (command) {
+      case 'clear-history':
+        clearBrowserHistory(timeRange).then(() => {
+          console.log('[QuickClear] History cleared via keyboard shortcut');
+          showNotification('Browser history cleared!');
+        });
+        break;
+
+      case 'clear-downloads':
+        clearDownloadHistory(timeRange).then(() => {
+          console.log('[QuickClear] Downloads cleared via keyboard shortcut');
+          showNotification('Download history cleared!');
+        });
+        break;
+
+      case 'clear-history-downloads':
+        clearHistoryAndDownloads(timeRange).then(() => {
+          console.log('[QuickClear] History + Downloads cleared via keyboard shortcut');
+          showNotification('History and downloads cleared!');
+        });
+        break;
+    }
+  });
+});
+
+// Show notification to user
+const showNotification = (message: string) => {
+  chrome.notifications.create({
+    type: 'basic',
+    iconUrl: 'icons/icon-48.png',
+    title: 'Quick Clear',
+    message: message,
+    priority: 1,
+  });
+};

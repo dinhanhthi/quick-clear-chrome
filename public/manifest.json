@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Quick Clear",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Quickly remove browser and download history.",
   "permissions": [
     "browsingData",
@@ -9,7 +9,8 @@
     "downloads",
     "storage",
     "tabs",
-    "alarms"
+    "alarms",
+    "notifications"
   ],
   "action": {
     "default_popup": "index.html",
@@ -30,5 +31,28 @@
     "32": "icons/icon-32.png",
     "48": "icons/icon-48.png",
     "128": "icons/icon-128.png"
+  },
+  "commands": {
+    "clear-history": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+J",
+        "mac": "Command+Shift+J"
+      },
+      "description": "Clear browser history"
+    },
+    "clear-downloads": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+K",
+        "mac": "Command+Shift+K"
+      },
+      "description": "Clear download history"
+    },
+    "clear-history-downloads": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+U",
+        "mac": "Command+Shift+U"
+      },
+      "description": "Clear history and downloads"
+    }
   }
 }

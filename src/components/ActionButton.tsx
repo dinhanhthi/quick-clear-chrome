@@ -7,6 +7,7 @@ interface ActionButtonProps {
   onClick: () => void;
   variant?: 'primary' | 'danger' | 'warning' | 'info';
   disabled?: boolean;
+  shortcut?: string;
 }
 
 const ActionButton: React.FC<ActionButtonProps> = ({
@@ -15,6 +16,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   icon,
   onClick,
   disabled = false,
+  shortcut,
 }) => {
   const btnStyle: React.CSSProperties = {
     display: 'flex',
@@ -38,7 +40,9 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   };
 
   const iconWithFixedSize = React.isValidElement(icon)
-    ? React.cloneElement(icon as React.ReactElement<unknown>, { size: 20 })
+    ? React.cloneElement(icon as React.ReactElement<{ size?: number }>, {
+        size: 20,
+      })
     : icon;
 
   return (
@@ -64,8 +68,29 @@ const ActionButton: React.FC<ActionButtonProps> = ({
       >
         {iconWithFixedSize}
       </div>
-      <div style={{ fontSize: '14px', fontWeight: 500, lineHeight: 1.2 }}>
-        {title.replace('Clear ', '')}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          gap: '5px',
+        }}
+      >
+        <div style={{ fontSize: '14px', fontWeight: 500, lineHeight: 1.2 }}>
+          {title.replace('Clear ', '')}
+        </div>
+        {shortcut && (
+          <div
+            style={{
+              fontSize: '10px',
+              opacity: 0.5,
+              lineHeight: 1,
+              fontFamily: 'monospace',
+            }}
+          >
+            {shortcut}
+          </div>
+        )}
       </div>
     </button>
   );

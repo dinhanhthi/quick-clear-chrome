@@ -3,7 +3,7 @@ import ManualTab from './components/ManualTab';
 import AutoTab from './components/AutoTab';
 import SiteDataCleaner from './components/SiteDataCleaner';
 import IgnoreListManager from './components/IgnoreListManager';
-import { GitHubIcon, SunIcon, MoonIcon } from './components/Icons';
+import { GitHubIcon, SunIcon, MoonIcon, KeyboardIcon } from './components/Icons';
 import {
   clearSiteData,
   clearSiteHistoryAndDownloads,
@@ -233,6 +233,27 @@ function App() {
           </span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button
+            onClick={() => {
+              chrome.tabs.create({ url: 'chrome://extensions/shortcuts' });
+            }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              background: 'none',
+              border: 'none',
+              color: 'var(--text-color)',
+              opacity: 0.6,
+              transition: 'opacity 0.2s',
+              cursor: 'pointer',
+              padding: 0,
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.6')}
+            title="Modify keyboard shortcuts"
+          >
+            <KeyboardIcon size={18} />
+          </button>
           <button
             onClick={toggleTheme}
             style={{
