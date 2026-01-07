@@ -38,7 +38,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   };
 
   const iconWithFixedSize = React.isValidElement(icon)
-    ? React.cloneElement(icon as React.ReactElement<any>, { size: 20 })
+    ? React.cloneElement(icon as React.ReactElement<unknown>, { size: 20 })
     : icon;
 
   return (

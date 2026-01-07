@@ -1,7 +1,7 @@
 import type { AutoClearSettings, IgnoreListSettings } from './chrome-api';
 
 // Mock storage for chrome.storage.local
-const mockStorage: Record<string, any> = {
+const mockStorage: Record<string, unknown> = {
   autoClearSettings: {
     enabled: true,
     interval: 30,
@@ -47,10 +47,10 @@ const storageListeners: Array<
 export const mockChromeStorageLocal = {
   get: (
     keys: string | string[] | null,
-    callback: (items: { [key: string]: any }) => void
+    callback: (items: { [key: string]: unknown }) => void
   ) => {
     console.log('[MOCK] chrome.storage.local.get', keys);
-    const result: { [key: string]: any } = {};
+    const result: { [key: string]: unknown } = {};
 
     if (keys === null) {
       Object.assign(result, mockStorage);
@@ -69,7 +69,7 @@ export const mockChromeStorageLocal = {
     setTimeout(() => callback(result), 10);
   },
 
-  set: (items: { [key: string]: any }, callback?: () => void) => {
+  set: (items: { [key: string]: unknown }, callback?: () => void) => {
     console.log('[MOCK] chrome.storage.local.set', items);
     const changes: { [key: string]: chrome.storage.StorageChange } = {};
 
@@ -244,13 +244,13 @@ export function installMockChromeAPIs() {
   if (typeof window !== 'undefined') {
     console.log('[MOCK] Installing mock Chrome APIs');
     // Force install mocks even if chrome object exists
-    (window as any).chrome = {
+    (window as Window & typeof globalThis & { chrome: typeof chrome }).chrome = {
       storage: mockChromeStorage,
       alarms: mockChromeAlarms,
       tabs: mockChromeTabs,
       browsingData: mockChromeBrowsingData,
       history: mockChromeHistory,
       runtime: mockChromeRuntime,
-    };
+    } as typeof chrome;
   }
 }

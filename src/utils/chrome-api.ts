@@ -50,7 +50,7 @@ const getOrigin = (input: string): string | null => {
     }
     const url = new URL(urlStr);
     return url.origin;
-  } catch (e) {
+  } catch {
     return null;
   }
 };
@@ -60,24 +60,24 @@ const isDev = () => !chrome?.browsingData;
 // Check if a URL matches any pattern in the ignore list
 const isUrlIgnored = (url: string, ignoreList: IgnoreListItem[]): boolean => {
   if (!ignoreList || ignoreList.length === 0) return false;
-  
+
   try {
     const urlObj = new URL(url);
     const urlHost = urlObj.hostname;
-    
+
     return ignoreList.some((item) => {
       const pattern = item.url.trim();
       if (!pattern) return false;
-      
+
       // Exact URL match
       if (url === pattern || url.startsWith(pattern)) return true;
-      
+
       // Domain/hostname match
       try {
         // Try parsing as URL
         const patternUrl = new URL(pattern.match(/^[a-zA-Z]+:\/\//) ? pattern : `https://${pattern}`);
         const patternHost = patternUrl.hostname;
-        
+
         // Match exact hostname or subdomain
         return urlHost === patternHost || urlHost.endsWith(`.${patternHost}`);
       } catch {
@@ -98,7 +98,7 @@ export const clearBrowserHistory = async (range: TimeRange): Promise<void> => {
 
   // Load ignore list
   const ignoreList = await loadIgnoreList();
-  
+
   if (ignoreList.items.length === 0) {
     // No ignore list - use fast bulk delete
     const since = getSinceTimestamp(range);
@@ -106,7 +106,7 @@ export const clearBrowserHistory = async (range: TimeRange): Promise<void> => {
       chrome.browsingData.removeHistory({ since }, resolve);
     });
   }
-  
+
   // With ignore list - fetch and filter individually
   const since = getSinceTimestamp(range);
   return new Promise((resolve) => {
@@ -264,7 +264,7 @@ export const clearSiteHistoryAndDownloads = async (
 
   // Load ignore list
   const ignoreList = await loadIgnoreList();
-  
+
   // Clear History entries for this site
   return new Promise((resolve) => {
     chrome.history.search(
@@ -292,11 +292,16 @@ export const getCurrentTabUrl = async (): Promise<string | null> => {
   return tab?.url || null;
 };
 
+// Extend Window interface for mock data
+interface WindowWithMocks extends Window {
+  __mockIgnoreList?: IgnoreListSettings;
+}
+
 // Ignore List Management
 export const loadIgnoreList = async (): Promise<IgnoreListSettings> => {
   if (isDev()) {
     // Return mock data in dev mode
-    const mockData = (window as any).__mockIgnoreList;
+    const mockData = (window as WindowWithMocks).__mockIgnoreList;
     if (mockData) return mockData;
     return { items: [] };
   }
@@ -312,7 +317,7 @@ export const loadIgnoreList = async (): Promise<IgnoreListSettings> => {
 export const saveIgnoreList = async (ignoreList: IgnoreListSettings): Promise<void> => {
   if (isDev()) {
     console.log('[DEV] Saving ignore list:', ignoreList);
-    (window as any).__mockIgnoreList = ignoreList;
+    (window as WindowWithMocks).__mockIgnoreList = ignoreList;
     return;
   }
 
@@ -324,17 +329,17 @@ export const saveIgnoreList = async (ignoreList: IgnoreListSettings): Promise<vo
 export const addToIgnoreList = async (url: string): Promise<void> => {
   const ignoreList = await loadIgnoreList();
   const normalizedUrl = url.trim();
-  
+
   // Check if already exists
   if (ignoreList.items.some((item) => item.url === normalizedUrl)) {
     return; // Already in list
   }
-  
+
   ignoreList.items.push({
     url: normalizedUrl,
     addedAt: Date.now(),
   });
-  
+
   await saveIgnoreList(ignoreList);
 };
 
@@ -347,7 +352,7 @@ export const removeFromIgnoreList = async (url: string): Promise<void> => {
 export const importIgnoreListFromText = async (text: string): Promise<number> => {
   const ignoreList = await loadIgnoreList();
   const lines = text.split('\n').map((line) => line.trim()).filter((line) => line.length > 0);
-  
+
   let addedCount = 0;
   for (const line of lines) {
     // Skip if already exists
@@ -359,7 +364,7 @@ export const importIgnoreListFromText = async (text: string): Promise<number> =>
       addedCount++;
     }
   }
-  
+
   await saveIgnoreList(ignoreList);
   return addedCount;
 };
