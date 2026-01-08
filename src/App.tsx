@@ -3,7 +3,12 @@ import ManualTab from './components/ManualTab';
 import AutoTab from './components/AutoTab';
 import SiteDataCleaner from './components/SiteDataCleaner';
 import IgnoreListManager from './components/IgnoreListManager';
-import { GitHubIcon, SunIcon, MoonIcon, KeyboardIcon } from './components/Icons';
+import {
+  GitHubIcon,
+  SunIcon,
+  MoonIcon,
+  KeyboardIcon,
+} from './components/Icons';
 import {
   clearSiteData,
   clearSiteHistoryAndDownloads,
@@ -19,7 +24,9 @@ import { useTheme } from './utils/useTheme';
 import packageJson from '../package.json';
 
 function App() {
-  const [activeTab, setActiveTab] = useState<'manual' | 'auto' | 'ignore'>('manual');
+  const [activeTab, setActiveTab] = useState<'manual' | 'auto' | 'ignore'>(
+    'manual'
+  );
   const [timeRange, setTimeRange] = useState<TimeRange>('last_hour');
   const { theme, resolvedTheme, toggleTheme } = useTheme();
 

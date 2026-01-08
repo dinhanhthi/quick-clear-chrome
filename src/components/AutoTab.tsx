@@ -98,7 +98,9 @@ const AutoTab = () => {
           />
           <select
             value={settings.unit}
-            onChange={(e) => handleUnitChange(e.target.value as 'minute' | 'hour' | 'day')}
+            onChange={(e) =>
+              handleUnitChange(e.target.value as 'minute' | 'hour' | 'day')
+            }
             style={{
               flex: 1,
               padding: '10px',
@@ -121,7 +123,12 @@ const AutoTab = () => {
 
       <TimeRangeSelector
         value={settings.timeRange}
-        onChange={(v) => saveSettings({ ...settings, timeRange: v as import('../utils/chrome-api').TimeRange })}
+        onChange={(v) =>
+          saveSettings({
+            ...settings,
+            timeRange: v as import('../utils/chrome-api').TimeRange,
+          })
+        }
       />
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>

@@ -244,13 +244,14 @@ export function installMockChromeAPIs() {
   if (typeof window !== 'undefined') {
     console.log('[MOCK] Installing mock Chrome APIs');
     // Force install mocks even if chrome object exists
-    (window as Window & typeof globalThis & { chrome: typeof chrome }).chrome = {
-      storage: mockChromeStorage,
-      alarms: mockChromeAlarms,
-      tabs: mockChromeTabs,
-      browsingData: mockChromeBrowsingData,
-      history: mockChromeHistory,
-      runtime: mockChromeRuntime,
-    } as typeof chrome;
+    (window as Window & typeof globalThis & { chrome: typeof chrome }).chrome =
+      {
+        storage: mockChromeStorage,
+        alarms: mockChromeAlarms,
+        tabs: mockChromeTabs,
+        browsingData: mockChromeBrowsingData,
+        history: mockChromeHistory,
+        runtime: mockChromeRuntime,
+      } as typeof chrome;
   }
 }

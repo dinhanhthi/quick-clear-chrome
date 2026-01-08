@@ -64,7 +64,7 @@ const ManualTab = ({
             onAction('history', () => clearBrowserHistory(timeRange))
           }
           variant="primary"
-          shortcut={`${modKey}+Shift+J`}
+          shortcut={`${modKey}+Shift+6`}
         />
 
         <ActionButton
@@ -75,7 +75,7 @@ const ManualTab = ({
             onAction('downloads', () => clearDownloadHistory(timeRange))
           }
           variant="info"
-          shortcut={`${modKey}+Shift+K`}
+          shortcut={`${modKey}+Shift+7`}
         />
 
         <ActionButton
@@ -88,7 +88,7 @@ const ManualTab = ({
             )
           }
           variant="primary"
-          shortcut={`${modKey}+Shift+U`}
+          shortcut={`${modKey}+Shift+8`}
         />
 
         <ActionButton

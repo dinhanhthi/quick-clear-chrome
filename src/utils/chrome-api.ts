@@ -75,7 +75,9 @@ const isUrlIgnored = (url: string, ignoreList: IgnoreListItem[]): boolean => {
       // Domain/hostname match
       try {
         // Try parsing as URL
-        const patternUrl = new URL(pattern.match(/^[a-zA-Z]+:\/\//) ? pattern : `https://${pattern}`);
+        const patternUrl = new URL(
+          pattern.match(/^[a-zA-Z]+:\/\//) ? pattern : `https://${pattern}`
+        );
         const patternHost = patternUrl.hostname;
 
         // Match exact hostname or subdomain
@@ -114,7 +116,9 @@ export const clearBrowserHistory = async (range: TimeRange): Promise<void> => {
       { text: '', startTime: since, maxResults: 100000 },
       (results) => {
         const deletePromises = results
-          .filter((item) => item.url && !isUrlIgnored(item.url, ignoreList.items))
+          .filter(
+            (item) => item.url && !isUrlIgnored(item.url, ignoreList.items)
+          )
           .map((item) => {
             return new Promise<void>((res) =>
               chrome.history.deleteUrl({ url: item.url! }, res)
@@ -271,7 +275,9 @@ export const clearSiteHistoryAndDownloads = async (
       { text: input, startTime: 0, maxResults: 10000 },
       (results) => {
         const deletePromises = results
-          .filter((item) => item.url && !isUrlIgnored(item.url, ignoreList.items))
+          .filter(
+            (item) => item.url && !isUrlIgnored(item.url, ignoreList.items)
+          )
           .map((item) => {
             return new Promise<void>((res) =>
               chrome.history.deleteUrl({ url: item.url! }, res)
@@ -314,7 +320,9 @@ export const loadIgnoreList = async (): Promise<IgnoreListSettings> => {
   });
 };
 
-export const saveIgnoreList = async (ignoreList: IgnoreListSettings): Promise<void> => {
+export const saveIgnoreList = async (
+  ignoreList: IgnoreListSettings
+): Promise<void> => {
   if (isDev()) {
     console.log('[DEV] Saving ignore list:', ignoreList);
     (window as WindowWithMocks).__mockIgnoreList = ignoreList;
@@ -349,9 +357,14 @@ export const removeFromIgnoreList = async (url: string): Promise<void> => {
   await saveIgnoreList(ignoreList);
 };
 
-export const importIgnoreListFromText = async (text: string): Promise<number> => {
+export const importIgnoreListFromText = async (
+  text: string
+): Promise<number> => {
   const ignoreList = await loadIgnoreList();
-  const lines = text.split('\n').map((line) => line.trim()).filter((line) => line.length > 0);
+  const lines = text
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
 
   let addedCount = 0;
   for (const line of lines) {

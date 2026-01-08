@@ -117,7 +117,9 @@ chrome.commands.onCommand.addListener((command) => {
 
   // Get the current time range setting from manual settings
   chrome.storage.local.get(['manualSettings'], (result) => {
-    const timeRange: TimeRange = (result.manualSettings as { timeRange?: TimeRange })?.timeRange || 'last_hour';
+    const timeRange: TimeRange =
+      (result.manualSettings as { timeRange?: TimeRange })?.timeRange ||
+      'last_hour';
     console.log(`[QuickClear] Using time range: ${timeRange}`);
 
     switch (command) {
@@ -137,7 +139,9 @@ chrome.commands.onCommand.addListener((command) => {
 
       case 'clear-history-downloads':
         clearHistoryAndDownloads(timeRange).then(() => {
-          console.log('[QuickClear] History + Downloads cleared via keyboard shortcut');
+          console.log(
+            '[QuickClear] History + Downloads cleared via keyboard shortcut'
+          );
           showNotification('History and downloads cleared!');
         });
         break;
