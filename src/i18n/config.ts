@@ -31,7 +31,9 @@ i18n.use(initReactI18next).init({
 
 // Load saved language after initialization
 getSavedLanguage().then((lng) => {
-  i18n.changeLanguage(lng);
+  if (lng !== 'en') {
+    i18n.changeLanguage(lng);
+  }
 });
 
 export default i18n;

@@ -65,15 +65,27 @@ async function captureScreenshot(
   // Reload to apply theme properly
   await page.reload({ waitUntil: 'networkidle0' });
   await page.waitForSelector('#playground-container');
-  await new Promise((r) => setTimeout(r, 300));
 
-  // Click on the appropriate tab
-  const tabButton = tab === 'manual' ? 'Manual' : 'Auto';
-  await page.evaluate((btnText) => {
-    const buttons = Array.from(document.querySelectorAll('button'));
-    const btn = buttons.find((b) => b.textContent?.trim() === btnText);
-    if (btn) btn.click();
-  }, tabButton);
+  // Wait a bit longer for i18n to load
+  await new Promise((r) => setTimeout(r, 800));
+
+  // Click on the appropriate tab using index (0 = Manual, 1 = Auto, 2 = Ignore List)
+  await page.evaluate(
+    (tabIndex) => {
+      // Find all tab buttons in the tabs container
+      const allButtons = Array.from(document.querySelectorAll('button'));
+      // Tab buttons are the ones with borderBottom style in the tabs section
+      const tabButtons = allButtons.slice(0, 10).filter((btn) => {
+        const style = window.getComputedStyle(btn);
+        return style.borderBottom && style.borderBottom !== 'none';
+      });
+
+      if (tabButtons[tabIndex]) {
+        (tabButtons[tabIndex] as HTMLElement).click();
+      }
+    },
+    tab === 'manual' ? 0 : 1
+  );
 
   // Wait for any animations
   await new Promise((r) => setTimeout(r, 300));
