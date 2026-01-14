@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { AutoClearSettings } from '../utils/chrome-api';
 import TimeRangeSelector from './TimeRangeSelector';
 
 const AutoTab = () => {
+  const { t } = useTranslation();
   const [settings, setSettings] = useState<AutoClearSettings>({
     enabled: false,
     interval: 60,
@@ -64,7 +66,7 @@ const AutoTab = () => {
           justifyContent: 'space-between',
         }}
       >
-        <span style={{ fontWeight: 600 }}>Enable Auto Clear</span>
+        <span style={{ fontWeight: 600 }}>{t('auto.enableAutoClear')}</span>
         <label className="switch">
           <input
             type="checkbox"
@@ -76,7 +78,9 @@ const AutoTab = () => {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <label style={{ fontSize: '13px', fontWeight: 500 }}>Frequency</label>
+        <label style={{ fontSize: '13px', fontWeight: 500 }}>
+          {t('auto.frequency')}
+        </label>
         <div style={{ display: 'flex', gap: '8px' }}>
           <input
             type="number"
@@ -114,9 +118,9 @@ const AutoTab = () => {
             }}
             disabled={!settings.enabled}
           >
-            <option value="minute">Minute(s)</option>
-            <option value="hour">Hour(s)</option>
-            <option value="day">Day(s)</option>
+            <option value="minute">{t('auto.minutes')}</option>
+            <option value="hour">{t('auto.hours')}</option>
+            <option value="day">{t('auto.days')}</option>
           </select>
         </div>
       </div>
@@ -133,7 +137,7 @@ const AutoTab = () => {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
         <label style={{ fontSize: '13px', fontWeight: 500 }}>
-          What to clear?
+          {t('auto.whatToClear')}
         </label>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
           <label
@@ -152,7 +156,7 @@ const AutoTab = () => {
               }
               disabled={!settings.enabled || settings.clearEverything}
             />
-            Browser History
+            {t('auto.browserHistory')}
           </label>
           <label
             style={{
@@ -170,7 +174,7 @@ const AutoTab = () => {
               }
               disabled={!settings.enabled || settings.clearEverything}
             />
-            Downloads
+            {t('auto.downloads')}
           </label>
           <label
             style={{
@@ -197,11 +201,11 @@ const AutoTab = () => {
               style={{ marginTop: '2px' }}
             />
             <span>
-              Everything{' '}
+              {t('auto.everything')}{' '}
               <span
                 style={{ color: 'var(--muted-foreground)', fontSize: '12px' }}
               >
-                (cookies, cache, history, downloads, passwords, etc.)
+                {t('auto.everythingNote')}
               </span>
             </span>
           </label>
@@ -219,8 +223,7 @@ const AutoTab = () => {
             color: 'var(--muted-foreground)',
           }}
         >
-          Next cleanup will happen based on the set interval. (Note: Browser
-          must be open)
+          {t('auto.nextCleanupNote')}
         </div>
       )}
 

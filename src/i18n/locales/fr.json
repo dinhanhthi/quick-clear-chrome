@@ -1,0 +1,86 @@
+{
+  "tabs": {
+    "manual": "Manuel",
+    "auto": "Auto",
+    "ignoreList": "Liste d'ignorés"
+  },
+  "header": {
+    "modifyShortcuts": "Modifier les raccourcis clavier",
+    "themeSystem": "Système"
+  },
+  "timeRange": {
+    "label": "Plage de temps",
+    "lastHour": "Dernière heure",
+    "last24h": "Dernières 24 heures",
+    "last7days": "7 derniers jours",
+    "last4weeks": "4 dernières semaines",
+    "allTime": "Tout le temps"
+  },
+  "manual": {
+    "history": "Historique",
+    "historyDesc": "Supprime l'historique des pages visitées",
+    "downloads": "Télécharg.",
+    "downloadsDesc": "Supprime l'historique des téléchargements",
+    "historyDL": "Hist. + DL",
+    "historyDLDesc": "Supprime uniquement l'historique et les téléchargements",
+    "everything": "Tout",
+    "everythingDesc": "Cookies, cache, historique, téléchargements...",
+    "confirmEverything": "Êtes-vous sûr de vouloir tout effacer ?\\n\\nCela supprimera :\\n• Tout l'historique de navigation\\n• Tous les cookies (vous serez déconnecté)\\n• Tout le cache et les données stockées\\n• Tous les mots de passe enregistrés\\n• Toutes les données de formulaire\\n\\nCette action ne peut pas être annulée !"
+  },
+  "auto": {
+    "enableAutoClear": "Activer le nettoyage automatique",
+    "frequency": "Fréquence",
+    "minutes": "Minute(s)",
+    "hours": "Heure(s)",
+    "days": "Jour(s)",
+    "whatToClear": "Que faut-il effacer ?",
+    "browserHistory": "Historique du navigateur",
+    "downloads": "Téléchargements",
+    "everything": "Tout",
+    "everythingNote": "(cookies, cache, historique, téléchargements, mots de passe, etc.)",
+    "nextCleanupNote": "Le prochain nettoyage aura lieu en fonction de l'intervalle défini. (Remarque : le navigateur doit être ouvert)"
+  },
+  "siteData": {
+    "title": "Nettoyeur de site spécifique",
+    "toggleLabel": "Uniquement hist. et DL, sinon tout.",
+    "placeholder": "exemple.com",
+    "clean": "Nettoyer",
+    "currentSite": "Site actuel",
+    "confirmClear": "Êtes-vous sûr de vouloir effacer {{dataType}} pour \"{{hostname}}\" ?",
+    "dataTypeHistory": "historique et téléchargements",
+    "dataTypeAll": "toutes les données (cookies, cache, historique, etc.)"
+  },
+  "ignoreList": {
+    "howItWorks": "Comment ça marche :",
+    "description": "Les URL de cette liste seront exclues lors de l'effacement de l'historique. Prend en charge les URL exactes, les domaines (par ex. exemple.com) ou les URL complètes (par ex. https://exemple.com).",
+    "placeholder": "exemple.com ou https://exemple.com",
+    "add": "Ajouter",
+    "import": "Importer depuis .txt",
+    "importNote": "(une URL par ligne)",
+    "loading": "Chargement...",
+    "noUrls": "Aucune URL dans la liste d'ignorés",
+    "added": "Ajouté le",
+    "remove": "Retirer de la liste d'ignorés",
+    "urlCount": "{{count}} URL dans la liste d'ignorés",
+    "urlCount_other": "{{count}} URL dans la liste d'ignorés",
+    "addedSuccess": "Ajouté à la liste d'ignorés",
+    "removedSuccess": "Retiré de la liste d'ignorés",
+    "importSuccess": "{{count}} URL importée",
+    "importSuccess_other": "{{count}} URL importées",
+    "addError": "Échec de l'ajout de l'URL",
+    "removeError": "Échec de la suppression de l'URL",
+    "importError": "Échec de l'importation du fichier"
+  },
+  "status": {
+    "gettingCurrentSite": "Récupération du site actuel...",
+    "couldNotGetSite": "Impossible de récupérer le site actuel.",
+    "cleaning": "Nettoyage de {{actionName}}...",
+    "cleared": "{{actionName}} effacé avec succès !",
+    "error": "Une erreur s'est produite.",
+    "autoCleanOn": "Nettoyage auto ACTIVÉ",
+    "last": "Dernier",
+    "next": "Prochain",
+    "never": "Jamais",
+    "calculating": "Calcul en cours..."
+  }
+}

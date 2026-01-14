@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import ActionButton from './ActionButton';
 import TimeRangeSelector from './TimeRangeSelector';
 import {
@@ -25,24 +26,16 @@ const ManualTab = ({
   onTimeRangeChange,
   onAction,
 }: ManualTabProps) => {
+  const { t } = useTranslation();
   // // Detect OS for keyboard shortcuts
   const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
   const modKey = isMac ? 'Cmd' : 'Ctrl';
 
   const handleClearEverything = () => {
-    const confirmed = window.confirm(
-      'Are you sure you want to clear EVERYTHING?\n\n' +
-        'This will remove:\n' +
-        '• All browsing history\n' +
-        "• All cookies (you'll be logged out)\n" +
-        '• All cache and stored data\n' +
-        '• All saved passwords\n' +
-        '• All form data\n\n' +
-        'This action cannot be undone!'
-    );
+    const confirmed = window.confirm(t('manual.confirmEverything'));
 
     if (confirmed) {
-      onAction('everything', () => clearEverything(timeRange));
+      onAction(t('manual.everything'), () => clearEverything(timeRange));
     }
   };
 
@@ -57,33 +50,35 @@ const ManualTab = ({
         style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}
       >
         <ActionButton
-          title="History"
-          description="Removes visited pages history"
+          title={t('manual.history')}
+          description={t('manual.historyDesc')}
           icon={<HistoryIcon size={24} />}
           onClick={() =>
-            onAction('history', () => clearBrowserHistory(timeRange))
+            onAction(t('manual.history'), () => clearBrowserHistory(timeRange))
           }
           variant="primary"
           shortcut={`${modKey}+Shift+6`}
         />
 
         <ActionButton
-          title="Downloads"
-          description="Removes download history"
+          title={t('manual.downloads')}
+          description={t('manual.downloadsDesc')}
           icon={<DownloadIcon size={24} />}
           onClick={() =>
-            onAction('downloads', () => clearDownloadHistory(timeRange))
+            onAction(t('manual.downloads'), () =>
+              clearDownloadHistory(timeRange)
+            )
           }
           variant="info"
           shortcut={`${modKey}+Shift+7`}
         />
 
         <ActionButton
-          title="History + DL"
-          description="Removes history and downloads only"
+          title={t('manual.historyDL')}
+          description={t('manual.historyDLDesc')}
           icon={<HistoryDownloadIcon size={24} />}
           onClick={() =>
-            onAction('history + downloads', () =>
+            onAction(t('manual.historyDL'), () =>
               clearHistoryAndDownloads(timeRange)
             )
           }
@@ -92,8 +87,8 @@ const ManualTab = ({
         />
 
         <ActionButton
-          title="Everything"
-          description="Cookies, cache, history, downloads..."
+          title={t('manual.everything')}
+          description={t('manual.everythingDesc')}
           icon={<TrashIcon size={24} />}
           onClick={handleClearEverything}
           variant="danger"

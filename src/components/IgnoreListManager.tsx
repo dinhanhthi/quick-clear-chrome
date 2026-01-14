@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   loadIgnoreList,
   addToIgnoreList,
@@ -9,6 +10,7 @@ import {
 import { TrashIcon } from './Icons';
 
 const IgnoreListManager = () => {
+  const { t } = useTranslation();
   const [items, setItems] = useState<IgnoreListItem[]>([]);
   const [newUrl, setNewUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -42,9 +44,9 @@ const IgnoreListManager = () => {
       await addToIgnoreList(newUrl.trim());
       setNewUrl('');
       await loadList();
-      showMessage('Added to ignore list', 'success');
+      showMessage(t('ignoreList.addedSuccess'), 'success');
     } catch {
-      showMessage('Failed to add URL', 'error');
+      showMessage(t('ignoreList.addError'), 'error');
     }
   };
 
@@ -52,9 +54,9 @@ const IgnoreListManager = () => {
     try {
       await removeFromIgnoreList(url);
       await loadList();
-      showMessage('Removed from ignore list', 'success');
+      showMessage(t('ignoreList.removedSuccess'), 'success');
     } catch {
-      showMessage('Failed to remove URL', 'error');
+      showMessage(t('ignoreList.removeError'), 'error');
     }
   };
 
@@ -67,11 +69,11 @@ const IgnoreListManager = () => {
       const addedCount = await importIgnoreListFromText(text);
       await loadList();
       showMessage(
-        `Imported ${addedCount} URL${addedCount !== 1 ? 's' : ''}`,
+        t('ignoreList.importSuccess', { count: addedCount }),
         'success'
       );
     } catch {
-      showMessage('Failed to import file', 'error');
+      showMessage(t('ignoreList.importError'), 'error');
     }
 
     // Reset file input
@@ -110,10 +112,8 @@ const IgnoreListManager = () => {
           lineHeight: 1.5,
         }}
       >
-        <strong>How it works:</strong> URLs in this list will be excluded when
-        clearing history. Supports exact URLs, domains (e.g.,{' '}
-        <code>example.com</code>), or full URLs (e.g.,{' '}
-        <code>https://example.com</code>).
+        <strong>{t('ignoreList.howItWorks')}</strong>{' '}
+        {t('ignoreList.description')}
       </div>
 
       {/* Add URL Form */}
@@ -125,7 +125,7 @@ const IgnoreListManager = () => {
           type="text"
           value={newUrl}
           onChange={(e) => setNewUrl(e.target.value)}
-          placeholder="example.com or https://example.com"
+          placeholder={t('ignoreList.placeholder')}
           style={{
             flex: 1,
             padding: '10px',
@@ -153,7 +153,7 @@ const IgnoreListManager = () => {
             whiteSpace: 'nowrap',
           }}
         >
-          Add
+          {t('ignoreList.add')}
         </button>
       </form>
 
@@ -186,7 +186,7 @@ const IgnoreListManager = () => {
             (e.currentTarget.style.backgroundColor = 'var(--card-bg)')
           }
         >
-          📄 Import from .txt
+          📄 {t('ignoreList.import')}
         </label>
         <input
           id="import-file"
@@ -196,7 +196,7 @@ const IgnoreListManager = () => {
           style={{ display: 'none' }}
         />
         <span style={{ fontSize: '11px', color: 'var(--muted-foreground)' }}>
-          (one URL per line)
+          {t('ignoreList.importNote')}
         </span>
       </div>
 
@@ -242,7 +242,7 @@ const IgnoreListManager = () => {
               color: 'var(--muted-foreground)',
             }}
           >
-            Loading...
+            {t('ignoreList.loading')}
           </div>
         ) : items.length === 0 ? (
           <div
@@ -253,7 +253,7 @@ const IgnoreListManager = () => {
               color: 'var(--muted-foreground)',
             }}
           >
-            No URLs in ignore list
+            {t('ignoreList.noUrls')}
           </div>
         ) : (
           <div>
@@ -305,7 +305,7 @@ const IgnoreListManager = () => {
                       marginTop: '2px',
                     }}
                   >
-                    Added {formatDate(item.addedAt)}
+                    {t('ignoreList.added')} {formatDate(item.addedAt)}
                   </div>
                 </div>
                 <button
@@ -331,7 +331,7 @@ const IgnoreListManager = () => {
                     e.currentTarget.style.backgroundColor = 'transparent';
                     e.currentTarget.style.color = 'var(--muted-foreground)';
                   }}
-                  title="Remove from ignore list"
+                  title={t('ignoreList.remove')}
                 >
                   <TrashIcon size={16} />
                 </button>
@@ -348,7 +348,7 @@ const IgnoreListManager = () => {
           textAlign: 'center',
         }}
       >
-        {items.length} URL{items.length !== 1 ? 's' : ''} in ignore list
+        {t('ignoreList.urlCount', { count: items.length })}
       </div>
     </div>
   );

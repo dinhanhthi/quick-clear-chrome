@@ -1,0 +1,86 @@
+{
+  "tabs": {
+    "manual": "Thủ công",
+    "auto": "Tự động",
+    "ignoreList": "Danh sách bỏ qua"
+  },
+  "header": {
+    "modifyShortcuts": "Sửa phím tắt",
+    "themeSystem": "Hệ thống"
+  },
+  "timeRange": {
+    "label": "Khoảng thời gian",
+    "lastHour": "1 giờ trước",
+    "last24h": "24 giờ trước",
+    "last7days": "7 ngày trước",
+    "last4weeks": "4 tuần trước",
+    "allTime": "Toàn bộ"
+  },
+  "manual": {
+    "history": "Lịch sử",
+    "historyDesc": "Xóa lịch sử các trang đã truy cập",
+    "downloads": "Tải xuống",
+    "downloadsDesc": "Xóa lịch sử tải xuống",
+    "historyDL": "Lịch sử + TXuống",
+    "historyDLDesc": "Chỉ xóa lịch sử và tải xuống",
+    "everything": "Tất cả",
+    "everythingDesc": "Cookies, cache, lịch sử, tải xuống...",
+    "confirmEverything": "Bạn có chắc muốn xóa TẤT CẢ?\\n\\nĐiều này sẽ xóa:\\n• Toàn bộ lịch sử duyệt web\\n• Toàn bộ cookies (bạn sẽ bị đăng xuất)\\n• Toàn bộ cache và dữ liệu đã lưu\\n• Toàn bộ mật khẩu đã lưu\\n• Toàn bộ dữ liệu biểu mẫu\\n\\nHành động này không thể hoàn tác!"
+  },
+  "auto": {
+    "enableAutoClear": "Bật tự động xóa",
+    "frequency": "Tần suất",
+    "minutes": "Phút",
+    "hours": "Giờ",
+    "days": "Ngày",
+    "whatToClear": "Xóa những gì?",
+    "browserHistory": "Lịch sử trình duyệt",
+    "downloads": "Tải xuống",
+    "everything": "Tất cả",
+    "everythingNote": "(cookies, cache, lịch sử, tải xuống, mật khẩu, v.v.)",
+    "nextCleanupNote": "Lần dọn dẹp tiếp theo sẽ diễn ra dựa trên khoảng thời gian đã đặt. (Lưu ý: Trình duyệt phải mở)"
+  },
+  "siteData": {
+    "title": "Xóa dữ liệu trang cụ thể",
+    "toggleLabel": "Chỉ lịch sử và tải xuống, nếu không sẽ xóa tất cả dữ liệu.",
+    "placeholder": "example.com",
+    "clean": "Xóa",
+    "currentSite": "Trang hiện tại",
+    "confirmClear": "Bạn có chắc muốn xóa {{dataType}} cho \"{{hostname}}\"?",
+    "dataTypeHistory": "lịch sử và tải xuống",
+    "dataTypeAll": "tất cả dữ liệu (cookies, cache, lịch sử, v.v.)"
+  },
+  "ignoreList": {
+    "howItWorks": "Cách hoạt động:",
+    "description": "URL trong danh sách này sẽ được loại trừ khi xóa lịch sử. Hỗ trợ URL chính xác, tên miền (ví dụ: example.com), hoặc URL đầy đủ (ví dụ: https://example.com).",
+    "placeholder": "example.com hoặc https://example.com",
+    "add": "Thêm",
+    "import": "Nhập từ .txt",
+    "importNote": "(mỗi dòng một URL)",
+    "loading": "Đang tải...",
+    "noUrls": "Không có URL trong danh sách bỏ qua",
+    "added": "Đã thêm",
+    "remove": "Xóa khỏi danh sách bỏ qua",
+    "urlCount": "{{count}} URL trong danh sách bỏ qua",
+    "urlCount_other": "{{count}} URL trong danh sách bỏ qua",
+    "addedSuccess": "Đã thêm vào danh sách bỏ qua",
+    "removedSuccess": "Đã xóa khỏi danh sách bỏ qua",
+    "importSuccess": "Đã nhập {{count}} URL",
+    "importSuccess_other": "Đã nhập {{count}} URL",
+    "addError": "Thêm URL thất bại",
+    "removeError": "Xóa URL thất bại",
+    "importError": "Nhập file thất bại"
+  },
+  "status": {
+    "gettingCurrentSite": "Đang lấy trang hiện tại...",
+    "couldNotGetSite": "Không thể lấy trang hiện tại.",
+    "cleaning": "Đang xóa {{actionName}}...",
+    "cleared": "Đã xóa {{actionName}} thành công!",
+    "error": "Đã xảy ra lỗi.",
+    "autoCleanOn": "Tự động xóa ĐANG BẬT",
+    "last": "Lần trước",
+    "next": "Lần sau",
+    "never": "Chưa bao giờ",
+    "calculating": "Đang tính toán..."
+  }
+}

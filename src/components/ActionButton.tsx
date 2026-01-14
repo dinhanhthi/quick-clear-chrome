@@ -76,7 +76,14 @@ const ActionButton: React.FC<ActionButtonProps> = ({
           gap: '5px',
         }}
       >
-        <div style={{ fontSize: '14px', fontWeight: 500, lineHeight: 1.2 }}>
+        <div
+          style={{
+            fontSize: '14px',
+            fontWeight: 500,
+            lineHeight: 1.2,
+            whiteSpace: 'nowrap',
+          }}
+        >
           {title.replace('Clear ', '')}
         </div>
         {shortcut && (
@@ -86,6 +93,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
               opacity: 0.5,
               lineHeight: 1,
               fontFamily: 'monospace',
+              whiteSpace: 'nowrap',
             }}
           >
             {shortcut}

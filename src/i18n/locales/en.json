@@ -1,0 +1,86 @@
+{
+  "tabs": {
+    "manual": "Manual",
+    "auto": "Auto",
+    "ignoreList": "Ignore List"
+  },
+  "header": {
+    "modifyShortcuts": "Modify keyboard shortcuts",
+    "themeSystem": "System"
+  },
+  "timeRange": {
+    "label": "Time Range",
+    "lastHour": "Last Hour",
+    "last24h": "Last 24 Hours",
+    "last7days": "Last 7 Days",
+    "last4weeks": "Last 4 Weeks",
+    "allTime": "All Time"
+  },
+  "manual": {
+    "history": "History",
+    "historyDesc": "Removes visited pages history",
+    "downloads": "Downloads",
+    "downloadsDesc": "Removes download history",
+    "historyDL": "History + DL",
+    "historyDLDesc": "Removes history and downloads only",
+    "everything": "Everything",
+    "everythingDesc": "Cookies, cache, history, downloads...",
+    "confirmEverything": "Are you sure you want to clear EVERYTHING?\\n\\nThis will remove:\\n• All browsing history\\n• All cookies (you'll be logged out)\\n• All cache and stored data\\n• All saved passwords\\n• All form data\\n\\nThis action cannot be undone!"
+  },
+  "auto": {
+    "enableAutoClear": "Enable Auto Clear",
+    "frequency": "Frequency",
+    "minutes": "Minute(s)",
+    "hours": "Hour(s)",
+    "days": "Day(s)",
+    "whatToClear": "What to clear?",
+    "browserHistory": "Browser History",
+    "downloads": "Downloads",
+    "everything": "Everything",
+    "everythingNote": "(cookies, cache, history, downloads, passwords, etc.)",
+    "nextCleanupNote": "Next cleanup will happen based on the set interval. (Note: Browser must be open)"
+  },
+  "siteData": {
+    "title": "Specific Site Cleaner",
+    "toggleLabel": "Only history and DL, otherwise all data.",
+    "placeholder": "example.com",
+    "clean": "Clean",
+    "currentSite": "Current Site",
+    "confirmClear": "Are you sure you want to clear {{dataType}} for \"{{hostname}}\"?",
+    "dataTypeHistory": "history and downloads",
+    "dataTypeAll": "all data (cookies, cache, history, etc.)"
+  },
+  "ignoreList": {
+    "howItWorks": "How it works:",
+    "description": "URLs in this list will be excluded when clearing history. Supports exact URLs, domains (e.g., example.com), or full URLs (e.g., https://example.com).",
+    "placeholder": "example.com or https://example.com",
+    "add": "Add",
+    "import": "Import from .txt",
+    "importNote": "(one URL per line)",
+    "loading": "Loading...",
+    "noUrls": "No URLs in ignore list",
+    "added": "Added",
+    "remove": "Remove from ignore list",
+    "urlCount": "{{count}} URL in ignore list",
+    "urlCount_other": "{{count}} URLs in ignore list",
+    "addedSuccess": "Added to ignore list",
+    "removedSuccess": "Removed from ignore list",
+    "importSuccess": "Imported {{count}} URL",
+    "importSuccess_other": "Imported {{count}} URLs",
+    "addError": "Failed to add URL",
+    "removeError": "Failed to remove URL",
+    "importError": "Failed to import file"
+  },
+  "status": {
+    "gettingCurrentSite": "Getting current site...",
+    "couldNotGetSite": "Could not get current site.",
+    "cleaning": "Cleaning {{actionName}}...",
+    "cleared": "Successfully cleared {{actionName}}!",
+    "error": "Error occurred.",
+    "autoCleanOn": "Auto Clean ON",
+    "last": "Last",
+    "next": "Next",
+    "never": "Never",
+    "calculating": "Calculating..."
+  }
+}

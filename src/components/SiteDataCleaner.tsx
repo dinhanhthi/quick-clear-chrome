@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SiteIcon } from './Icons';
 
 interface SiteDataCleanerProps {
@@ -10,6 +11,7 @@ const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
   onClean,
   onCurrentSite,
 }) => {
+  const { t } = useTranslation();
   const [domain, setDomain] = useState('');
   const [onlyHistoryDownload, setOnlyHistoryDownload] = useState(false);
 
@@ -36,7 +38,7 @@ const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
       >
         <SiteIcon size={16} />
         <span style={{ fontWeight: 500, fontSize: '13px', marginLeft: '8px' }}>
-          Specific Site Cleaner
+          {t('siteData.title')}
         </span>
       </div>
 
@@ -44,13 +46,13 @@ const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
       <div
         style={{
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
+          alignItems: 'flex-start',
           gap: '8px',
           margin: '10px 0',
+          width: '100%',
         }}
       >
-        <label className="switch">
+        <label className="switch" style={{ marginTop: '2px', flexShrink: 0 }}>
           <input
             type="checkbox"
             checked={onlyHistoryDownload}
@@ -58,8 +60,15 @@ const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
           />
           <span className="slider round"></span>
         </label>
-        <span style={{ fontSize: '12px', color: 'var(--text-color)' }}>
-          Only history and DL, otherwise all data.
+        <span
+          style={{
+            fontSize: '12px',
+            color: 'var(--text-color)',
+            lineHeight: '1.4',
+            flex: 1,
+          }}
+        >
+          {t('siteData.toggleLabel')}
         </span>
       </div>
       <form
@@ -70,7 +79,7 @@ const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
           type="text"
           value={domain}
           onChange={(e) => setDomain(e.target.value)}
-          placeholder="example.com"
+          placeholder={t('siteData.placeholder')}
           style={{
             width: '100%',
             padding: '8px 12px',
@@ -100,7 +109,7 @@ const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
               cursor: domain.trim() ? 'pointer' : 'not-allowed',
             }}
           >
-            Clean
+            {t('siteData.clean')}
           </button>
 
           {onCurrentSite && (
@@ -119,7 +128,7 @@ const SiteDataCleaner: React.FC<SiteDataCleanerProps> = ({
                 fontWeight: 500,
               }}
             >
-              Current Site
+              {t('siteData.currentSite')}
             </button>
           )}
         </div>

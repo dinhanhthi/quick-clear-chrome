@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import ManualTab from './components/ManualTab';
 import AutoTab from './components/AutoTab';
 import SiteDataCleaner from './components/SiteDataCleaner';
 import IgnoreListManager from './components/IgnoreListManager';
+import LanguageSelector from './components/LanguageSelector';
 import {
   GitHubIcon,
   SunIcon,
@@ -24,6 +26,7 @@ import { useTheme } from './utils/useTheme';
 import packageJson from '../package.json';
 
 function App() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'manual' | 'auto' | 'ignore'>(
     'manual'
   );
@@ -125,7 +128,7 @@ function App() {
   }, []);
 
   const formatTime = (timestamp: number | null) => {
-    if (!timestamp) return 'Never';
+    if (!timestamp) return t('status.never');
     // If today, show time only, else show date + time
     const date = new Date(timestamp);
     const isToday = new Date().toDateString() === date.toDateString();
@@ -138,20 +141,20 @@ function App() {
   };
 
   const handleClearCurrentSite = async (onlyHistoryDownload: boolean) => {
-    setStatus({ message: 'Getting current site...', type: 'info' });
+    setStatus({ message: t('status.gettingCurrentSite'), type: 'info' });
     const url = await getCurrentTabUrl();
     if (!url) {
-      setStatus({ message: 'Could not get current site.', type: 'error' });
+      setStatus({ message: t('status.couldNotGetSite'), type: 'error' });
       setTimeout(() => setStatus(null), 2000);
       return;
     }
 
     const hostname = new URL(url).hostname;
     const dataType = onlyHistoryDownload
-      ? 'history and downloads'
-      : 'all data (cookies, cache, history, etc.)';
+      ? t('siteData.dataTypeHistory')
+      : t('siteData.dataTypeAll');
     const confirmed = window.confirm(
-      `Are you sure you want to clear ${dataType} for "${hostname}"?`
+      t('siteData.confirmClear', { dataType, hostname })
     );
 
     if (!confirmed) {
@@ -160,8 +163,8 @@ function App() {
     }
 
     const actionName = onlyHistoryDownload
-      ? `history and downloads for ${hostname}`
-      : `site data for ${hostname}`;
+      ? `${t('manual.historyDL')} for ${hostname}`
+      : `${t('siteData.title')} for ${hostname}`;
     const clearFn = onlyHistoryDownload
       ? () => clearSiteHistoryAndDownloads(url)
       : () => clearSiteData(url);
@@ -172,17 +175,17 @@ function App() {
     actionName: string,
     actionFn: () => Promise<void>
   ) => {
-    setStatus({ message: `Cleaning ${actionName}...`, type: 'info' });
+    setStatus({ message: t('status.cleaning', { actionName }), type: 'info' });
     try {
       await actionFn();
       setStatus({
-        message: `Successfully cleared ${actionName}!`,
+        message: t('status.cleared', { actionName }),
         type: 'success',
       });
       setTimeout(() => setStatus(null), 2000);
     } catch (error) {
       console.error(error);
-      setStatus({ message: 'Error occurred.', type: 'error' });
+      setStatus({ message: t('status.error'), type: 'error' });
       setTimeout(() => setStatus(null), 2000);
     }
   };
@@ -257,10 +260,11 @@ function App() {
             }}
             onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
             onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.6')}
-            title="Modify keyboard shortcuts"
+            title={t('header.modifyShortcuts')}
           >
             <KeyboardIcon size={18} />
           </button>
+          <LanguageSelector />
           <button
             onClick={toggleTheme}
             style={{
@@ -276,7 +280,7 @@ function App() {
             }}
             onMouseEnter={(e) => (e.currentTarget.style.opacity = '1')}
             onMouseLeave={(e) => (e.currentTarget.style.opacity = '0.6')}
-            title={`Theme: ${theme === 'system' ? `System (${resolvedTheme})` : theme}`}
+            title={`Theme: ${theme === 'system' ? `${t('header.themeSystem')} (${resolvedTheme})` : theme}`}
           >
             {resolvedTheme === 'light' ? (
               <MoonIcon size={18} />
@@ -315,8 +319,7 @@ function App() {
         <button
           onClick={() => setActiveTab('manual')}
           style={{
-            flex: 1,
-            padding: '8px',
+            padding: '8px 16px',
             background: 'none',
             border: 'none',
             borderBottom:
@@ -330,15 +333,15 @@ function App() {
             fontWeight: 500,
             cursor: 'pointer',
             transition: 'all 0.2s',
+            whiteSpace: 'nowrap',
           }}
         >
-          Manual
+          {t('tabs.manual')}
         </button>
         <button
           onClick={() => setActiveTab('auto')}
           style={{
-            flex: 1,
-            padding: '8px',
+            padding: '8px 16px',
             background: 'none',
             border: 'none',
             borderBottom:
@@ -356,9 +359,10 @@ function App() {
             alignItems: 'center',
             justifyContent: 'center',
             gap: '6px',
+            whiteSpace: 'nowrap',
           }}
         >
-          Auto
+          {t('tabs.auto')}
           {autoEnabled && (
             <span
               style={{
@@ -374,8 +378,7 @@ function App() {
         <button
           onClick={() => setActiveTab('ignore')}
           style={{
-            flex: 1,
-            padding: '8px',
+            padding: '8px 16px',
             background: 'none',
             border: 'none',
             borderBottom:
@@ -389,9 +392,10 @@ function App() {
             fontWeight: 500,
             cursor: 'pointer',
             transition: 'all 0.2s',
+            whiteSpace: 'nowrap',
           }}
         >
-          Ignore List
+          {t('tabs.ignoreList')}
         </button>
       </div>
 
@@ -405,8 +409,8 @@ function App() {
           <SiteDataCleaner
             onClean={(domain, onlyHistoryDownload) => {
               const actionName = onlyHistoryDownload
-                ? `history and downloads for ${domain}`
-                : `site data for ${domain}`;
+                ? `${t('manual.historyDL')} for ${domain}`
+                : `${t('siteData.title')} for ${domain}`;
               const clearFn = onlyHistoryDownload
                 ? () => clearSiteHistoryAndDownloads(domain)
                 : () => clearSiteData(domain);
@@ -467,7 +471,7 @@ function App() {
               fontWeight: 600,
             }}
           >
-            Auto Clean ON
+            {t('status.autoCleanOn')}
           </div>
           <div
             style={{
@@ -476,9 +480,12 @@ function App() {
               color: 'var(--muted-foreground)',
             }}
           >
-            <span>Last: {formatTime(lastRun)}</span>
             <span>
-              Next: {nextRun ? formatTime(nextRun) : 'Calculating...'}
+              {t('status.last')}: {formatTime(lastRun)}
+            </span>
+            <span>
+              {t('status.next')}:{' '}
+              {nextRun ? formatTime(nextRun) : t('status.calculating')}
             </span>
           </div>
         </div>

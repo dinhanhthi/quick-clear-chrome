@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface TimeRangeSelectorProps {
   value: string;
@@ -9,6 +10,8 @@ const TimeRangeSelector: React.FC<TimeRangeSelectorProps> = ({
   value,
   onChange,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div style={{ marginBottom: '16px' }}>
       <label
@@ -20,7 +23,7 @@ const TimeRangeSelector: React.FC<TimeRangeSelectorProps> = ({
           color: 'var(--text-color)',
         }}
       >
-        Time Range
+        {t('timeRange.label')}
       </label>
       <div style={{ position: 'relative' }}>
         <select
@@ -38,11 +41,11 @@ const TimeRangeSelector: React.FC<TimeRangeSelectorProps> = ({
             outline: 'none',
           }}
         >
-          <option value="last_hour">Last Hour</option>
-          <option value="last_24h">Last 24 Hours</option>
-          <option value="last_7days">Last 7 Days</option>
-          <option value="last_4weeks">Last 4 Weeks</option>
-          <option value="all_time">All Time</option>
+          <option value="last_hour">{t('timeRange.lastHour')}</option>
+          <option value="last_24h">{t('timeRange.last24h')}</option>
+          <option value="last_7days">{t('timeRange.last7days')}</option>
+          <option value="last_4weeks">{t('timeRange.last4weeks')}</option>
+          <option value="all_time">{t('timeRange.allTime')}</option>
         </select>
       </div>
     </div>
